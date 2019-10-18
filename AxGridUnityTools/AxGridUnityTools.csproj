@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{65665CA7-252C-493F-83C1-92EEB9443354}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AxGrid</RootNamespace>
+    <AssemblyName>AxGridUnityTools</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MLog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\contrib\MLog.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat, Version=2.1.0.2, Culture=neutral, PublicKeyToken=568866805651201f">
+      <HintPath>..\contrib\SmartFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\contrib\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\contrib\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\MonoBehaviourExt.cs" />
+    <Compile Include="Base\MonoBehaviourExtBind.cs" />
+    <Compile Include="FSM\FSM.cs" />
+    <Compile Include="FSM\FSMState.cs" />
+    <Compile Include="Model\AsyncEventManager.cs" />
+    <Compile Include="Model\AsyncExecutor.cs" />
+    <Compile Include="Model\DynamicModel.cs" />
+    <Compile Include="Path\CPath.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SmartFormat\PointFormater.cs" />
+    <Compile Include="SmartFormat\TemplateFormater.cs" />
+    <Compile Include="Text\ITextRepository.cs" />
+    <Compile Include="Text\Text.cs" />
+    <Compile Include="Text\TextRepository.cs" />
+    <Compile Include="Utils\DictionaryHelper.cs" />
+    <Compile Include="Utils\Easing.cs" />
+    <Compile Include="Utils\EasingTo.cs" />
+    <Compile Include="Utils\Numbers.cs" />
+    <Compile Include="Utils\StaticUtils.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

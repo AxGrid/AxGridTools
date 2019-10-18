@@ -1,0 +1,14 @@
+.DS_Store
+*/bin/*
+*/obj/*
+.dll
+.mdb
+.idea/
+build/
+contrib/proto
+packages.config
+BackServer2.userprefs
+/BackServer2/MainSettingsVer.cs
+/Assets/StreamingAssets
+packages/
+;config.ini
