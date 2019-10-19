@@ -157,5 +157,19 @@ namespace AxGrid.Utils
                 queue.Enqueue(x1);
             return queue;
         }
+        
+        /// <summary>
+        /// IEnumerable ForEach
+        /// </summary>
+        /// <param name="enumeration"></param>
+        /// <param name="action"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach(T item in enumeration)
+            {
+                action(item);
+            }
+        }
     }
 }

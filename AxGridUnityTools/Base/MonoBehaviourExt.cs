@@ -345,7 +345,7 @@ namespace AxGrid.Base
 
 
 			awakeList.Sort();
-			startList.Sort();
+			startList.Sort(); // = startList.OrderBy(item => item.Priority).ToList();
 			refreshList.Sort();
 			updateList.Sort();
 

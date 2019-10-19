@@ -57,6 +57,7 @@
     <Compile Include="Model\AsyncEventManager.cs" />
     <Compile Include="Model\AsyncExecutor.cs" />
     <Compile Include="Model\DynamicModel.cs" />
+    <Compile Include="Model\SimpleModel.cs" />
     <Compile Include="Path\CPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

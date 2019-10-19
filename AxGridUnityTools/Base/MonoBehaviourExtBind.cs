@@ -9,7 +9,7 @@ namespace AxGrid.Base
     /// </summary>
     public class MonoBehaviourExtBind : MonoBehaviourExt
     {
-        [OnStart]
+        [OnStart(-100)]
         protected void __Bind()
         {
             try
@@ -22,7 +22,7 @@ namespace AxGrid.Base
             }
         }
 
-        [OnDestroy]
+        [OnDestroy(int.MaxValue)]
         protected void __UnBind()
         {
             if (Settings.Model == null)
