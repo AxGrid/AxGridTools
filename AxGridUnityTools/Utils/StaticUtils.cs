@@ -57,11 +57,6 @@ namespace AxGrid.Utils
             list.Add(item);
         }
 
-        public static Vector3 SetY(this Vector3 vector, float y)
-        {
-            vector = new Vector3(vector.x, y, vector.z);
-            return vector;
-        }
 
         public static List<U> SingleList<U>(U item)
         {
@@ -171,5 +166,44 @@ namespace AxGrid.Utils
                 action(item);
             }
         }
+
+
+        public static void SwapArrays<T>(ref T[] a, ref T[] b) {
+            var tmp = new T[a.Length];
+            Array.Copy(a, tmp, a.Length);
+            a = b;
+            b = tmp;
+        }
+
+
+        public static Color SetR(this Color color, float value) {
+            return new Color(value, color.g, color.b, color.a);
+        }
+        
+        public static Color SetG(this Color color, float value) {
+            return new Color(color.r, value,  color.b, color.a);
+        }
+
+        public static Color SetB(this Color color, float value) {
+            return new Color(color.r, color.g, value, color.a);
+        }
+
+        public static Color SetA(this Color color, float value) {
+            return new Color(color.r, color.g, color.b, value);
+        }
+
+        
+        public static Vector3 SetX(this Vector3 vector, float value) {
+            return new Vector3(value, vector.y, vector.z);
+        }
+
+        public static Vector3 SetY(this Vector3 vector, float value) {
+            return new Vector3(vector.x, value, vector.z);
+        }
+
+        public static Vector3 SetZ(this Vector3 vector, float value) {
+            return new Vector3(vector.x, vector.y, value);
+        }
+        
     }
 }

@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\MonoBehaviourExt.cs" />
+    <Compile Include="Base\MonoBehaviourExt2D.cs" />
+    <Compile Include="Base\MonoBehaviourExt2DBind.cs" />
     <Compile Include="Base\MonoBehaviourExtBind.cs" />
     <Compile Include="FSM\FSM.cs" />
     <Compile Include="FSM\FSMState.cs" />

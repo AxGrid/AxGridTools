@@ -1,14 +1,7 @@
-﻿using System;
-using UnityEngine;
+using System;
 
-namespace AxGrid.Base
-{
-    /// <inheritdoc />
-    /// <summary>
-    /// Абстрактный класс связывания событий
-    /// </summary>
-    public abstract class MonoBehaviourExtBind : MonoBehaviourExt
-    {
+namespace AxGrid.Base {
+    public abstract class MonoBehaviourExt2DBind : MonoBehaviourExt2D {
         [OnStart(-100)]
         protected void __Bind()
         {

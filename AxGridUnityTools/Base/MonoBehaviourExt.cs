@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AxGrid.Base
 {
-	public class MonoBehaviourExt : MonoBehaviour
+	public abstract class MonoBehaviourExt : MonoBehaviour
 	{
 		private List<BaseAttributeInstance> awakeList;
 		private List<BaseAttributeInstance> destroyList;
