@@ -14,7 +14,8 @@ namespace AxGrid.Path
         Continue,
         Immediately,
         Now,
-        Error
+        Error,
+        Stop
     }
     
     public class CPath
@@ -31,16 +32,39 @@ namespace AxGrid.Path
         public static CPath Create(){ return new CPath(); }
         public static CPath CreateLoop(){ return new CPath(true); }
 
-        
+        private Action StopAction = null;
 
         
-        private bool Loop { get; set; }
+        public bool Loop { get; set; }
         
         public float DeltaF { get; protected set; }
         public double DeltaD { get; protected set; }
         public float PathStartTimeF { get; protected set; }
         public double PathStartTimeD { get; protected set; }
 
+
+        /// <summary>
+        /// Остановить путь
+        /// </summary>
+        public void StopPath() {
+            Clear();
+            StopAction?.Invoke();
+            StopAction = null;
+        }
+        
+        /// <summary>
+        /// Очистить путь
+        /// </summary>
+        public void Clear() {
+            Loop = false;
+            actions.Clear();
+            errors.Clear();
+            currentItem = null;
+        }
+        
+        /// <summary>
+        /// Сбросить таймеры
+        /// </summary>
         public void ResetTimerVariables()
         {
             DeltaF = 0;
@@ -65,8 +89,11 @@ namespace AxGrid.Path
         private Queue<PathItem> actions;
         private Queue<PathItem> errors;
 
-
-        public float StoredF { get; set; }
+        
+        /// <summary>
+        /// Текущее засторенное время пути
+        /// </summary>
+        public float StoredF { get; protected set; }
         
         public CPath Add(DPathActionContext action)
         {
@@ -74,37 +101,49 @@ namespace AxGrid.Path
             return this;
         }
         
+        /// <summary>
+        /// Добавить в путь Действие
+        /// </summary>
+        /// <param name="action">Действие</param>
+        /// <returns>Путь</returns>
         public CPath Add(DPathAction action)
         {
             actions.Enqueue(new PathItem {Action2 = action});
             return this;
         }
 
+        /// <summary>
+        /// Добавить в путь Действие в путь Ошибок
+        /// </summary>
+        /// <param name="action">Действие на ошибку</param>
+        /// <returns>Путь</returns>
         public CPath Error(DPathActionContext action)
         {
             errors.Enqueue(new PathItem {Action1 = action, Error = true});
             return this;
         }
         
+        /// <summary>
+        /// Добавить подноразовое действие в путь Ошибок
+        /// </summary>
+        /// <param name="action">Действие</param>
+        /// <returns>Путь</returns>
         public CPath Error(DPathAction action)
         {
             errors.Enqueue(new PathItem {Action2 = action, Error = true});
             return this;
         }
 
-        public int Count
-        {
-            get { return actions.Count; }
-        }
-
-        public void Clear() {
-            actions.Clear();
-            errors.Clear();
-            currentItem = null;
-        }
+        /// <summary>
+        /// Количество элементов в текущем пути
+        /// </summary>
+        public int Count => actions.Count;
 
 
-        public bool IsPLaying
+        /// <summary>
+        /// Путь в рабочем состоянии
+        /// </summary>
+        public bool IsPlaying
         {
             get { return Count > 0 || currentItem != null; }
         }
@@ -116,23 +155,43 @@ namespace AxGrid.Path
             StoredF = 0f;
         }
 
+        /// <summary>
+        /// Вернусть статус Now с установкой времени
+        /// </summary>
+        /// <param name="totalTime">Время</param>
+        /// <returns>путь</returns>        
         public Status Now(float totalTime)
         {
             return Immediately(totalTime);
         }
 
+        /// <summary>
+        /// Вернусть статус Immediately с установкой времени
+        /// </summary>
+        /// <param name="totalTime">Время</param>
+        /// <returns>путь</returns>        
         public Status Immediately(float totalTime)
         {
             StoredF = DeltaF - totalTime;
             return Status.Immediately;
         }
 
+        /// <summary>
+        /// Вернусть статус OK с установкой времени
+        /// </summary>
+        /// <param name="totalTime">Время</param>
+        /// <returns>путь</returns>
         public Status OK(float totalTime)
         {
             StoredF = DeltaF - totalTime;
             return Status.OK;
         }
         
+        /// <summary>
+        /// Добавить ожидание
+        /// </summary>
+        /// <param name="time">время в сек</param>
+        /// <returns></returns>
         public CPath Wait(float time)
         {
             return Add(p =>
@@ -156,6 +215,23 @@ namespace AxGrid.Path
                 currentItem = null;
         }
 
+        /// <summary>
+        /// Добавить действие остановки пути и в конец пути
+        /// </summary>
+        /// <param name="a">Действие</param>
+        /// <param name="onlyOnStopPath">Не добавлять в конец пути</param>
+        /// <returns></returns>
+        public CPath Stop(Action a, bool onlyOnStopPath = false) {
+            StopAction = a;
+            if (!onlyOnStopPath) Action(StopAction);
+            return this;
+        }
+        
+        /// <summary>
+        /// Добавить одноразовое действие
+        /// </summary>
+        /// <param name="a">Действие</param>
+        /// <returns></returns>
         public CPath Action(Action a)
         {
             Add(() =>
@@ -168,8 +244,11 @@ namespace AxGrid.Path
         
         public void Update(float deltaTime)
         {
-            if (Count == 0 && currentItem == null)
+            if (Count == 0 && currentItem == null) {
+                StopAction = null;
                 return;
+            }
+
             DeltaD += deltaTime;
             DeltaF += deltaTime;
             PathStartTimeF += deltaTime;
@@ -182,28 +261,44 @@ namespace AxGrid.Path
             }
             else
             {
-                switch (currentItem.Invoke(this))
-                {
-                    case Status.Continue:
-                        return;
-                    case Status.OK:
-                        SetCurrentItem();
-                        ResetTimers();
-                        return;
-                    case Status.Now:
-                    case Status.Immediately:
-                        SetCurrentItem();
-                        ResetTimers();
-                        Update(0);
-                        return;
-                    case Status.Error:
-                        actions = errors;
-                        errors = new Queue<PathItem>();
-                        SetCurrentItem();
-                        ResetTimers();
-                        Loop = false;
-                        Update(0);
-                        return;
+                try {
+                    switch (currentItem.Invoke(this)) {
+                        case Status.Continue:
+                            return;
+                        case Status.OK:
+                            SetCurrentItem();
+                            ResetTimers();
+                            return;
+                        case Status.Now:
+                        case Status.Immediately:
+                            SetCurrentItem();
+                            ResetTimers();
+                            Update(0);
+                            return;
+                        case Status.Error:
+                            actions = errors;
+                            errors = new Queue<PathItem>();
+                            SetCurrentItem();
+                            ResetTimers();
+                            Loop = false;
+                            Update(0);
+                            return;
+                        case Status.Stop:
+                            StopPath();
+                            return;
+                    }
+                }
+                catch (Exception e) {
+                    var ex = e;
+                    if (e.InnerException != null) ex = e.InnerException;
+                    Log.Error(ex);
+                    currentItem = null;
+                    actions = errors;
+                    errors = new Queue<PathItem>();
+                    SetCurrentItem();
+                    ResetTimers();
+                    Loop = false;
+                    Update(0);
                 }
             }
         }

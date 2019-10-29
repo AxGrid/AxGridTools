@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AxGrid.Model;
 using AxGrid.Path;
+using AxGrid.Utils;
 using UnityEngine;
 
 namespace AxGrid.Base
@@ -113,15 +114,40 @@ namespace AxGrid.Base
 		private MethodInfo disposeMethodInfo;
 		private Dictionary<MethodInfo, OnWhen> whenList;
 
-		private CPath path = null;
+		private CPath path = CPath.Create();
+		private List<CPath> pathCollection = new List<CPath>();
 
+		/// <summary>
+		/// Основной путь
+		/// </summary>
 		public CPath Path
 		{
-			get { return path; }
-			set { path = value; }
+			get => path;
+			set => path = value;
 		}
 
-		public bool IsPathAnimated => path != null && path.IsPLaying;
+
+		/// <summary>
+		/// Создать путь в коллекции путей
+		/// </summary>
+		/// <returns>Путь</returns>
+		public CPath CreateNewPath() {
+			var newPath = CPath.Create();
+			pathCollection.Add(newPath);
+			return newPath;
+		}
+
+		/// <summary>
+		/// Уничтожить путь в коллекции путей
+		/// </summary>
+		/// <param name="oldPath">Путь</param>
+		public void DestroyPath(CPath oldPath) {
+			pathCollection.Remove(oldPath);
+			oldPath.StopPath();
+		}
+
+		
+		public bool IsPathAnimated => path != null && path.IsPlaying;
 
 		private Animator _animator;
 		public Animator Animator
@@ -206,6 +232,8 @@ namespace AxGrid.Base
 				a.Update();
 			if (IsPathAnimated)
 				path.Update(Time.deltaTime);
+			pathCollection.Where(item => item.IsPlaying).ForEach(item => item.Update(Time.deltaTime));
+			if (pathCollection.Count > 0) pathCollection.RemoveAll(item => !item.IsPlaying);
 		}
 
 		public void OnDestroy()
@@ -225,6 +253,7 @@ namespace AxGrid.Base
 			Model?.EventManager.Remove(this);
 			Path?.Clear();
 			Path = null;
+			pathCollection.Clear();
 		}
 
 		public void ResetRefreshTimer()

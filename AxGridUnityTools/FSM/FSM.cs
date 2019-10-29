@@ -138,6 +138,21 @@ namespace AxGrid.FSM
             if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
             currentState.__EnterState(); 
         }
+        
+        /// <summary>
+        /// Перезайти в текущее состояние
+        /// </summary>
+        public void ReEnter() {
+            var name = this.CurrentStateName;
+            if (ShowFsmExitState) Log.Debug($"--- EXIT {CurrentStateName} ---");
+            currentState?.__ExitState();
+            if (!_states.ContainsKey(name))
+                throw new Exception($"Key {name} not found!");
+            currentState = _states[name];
+            CurrentStateName = name;
+            if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
+            currentState.__EnterState(); 
+        }
 
         /// <summary>
         /// Update loop
