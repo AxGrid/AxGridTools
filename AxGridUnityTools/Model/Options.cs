@@ -231,8 +231,8 @@ namespace AxGrid.Model {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="save"></param>
-        public void SavePrefs(string name = "opts", bool save = true) {
-            string json = JsonConvert.SerializeObject(dataObject);
+        public void SavePrefs(string name = "opts", bool allKeys = false, bool save = true) {
+            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i));
             PlayerPrefs.SetString(name, json);
             if (save) PlayerPrefs.Save();
         }
