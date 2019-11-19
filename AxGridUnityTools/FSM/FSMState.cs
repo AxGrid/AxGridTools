@@ -312,9 +312,12 @@ namespace AxGrid.FSM
             catch (TargetInvocationException e)
             {
                 Exception thr = e;
-                while (thr.InnerException != null)
+                
+                while (thr.InnerException != null) {
+                    Log.Error($"Inner:{thr.Message}\n{thr.StackTrace}");
                     thr = thr.InnerException;
-                Log.Error(thr);
+                }
+                Log.Error($"Final:{thr.Message}\n{thr.StackTrace}");
             }
             
             if (Loop)

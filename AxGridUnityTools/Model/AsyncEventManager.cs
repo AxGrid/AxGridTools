@@ -46,11 +46,11 @@ namespace AxGrid.Model
                         var thr = e;
                         while (thr.InnerException != null)
                             thr = thr.InnerException;
-                        Log.Error($"Invoke Exception:{thr.Message}\n{thr.StackTrace}");
+                        Log.Error($"Invoke {Target.GetType().Name}.{Method.Name} Exception:{thr.Message}\n{thr.StackTrace}");
                         throw thr;
                     }
                     catch (Exception ex) {
-                        Log.Error($"Catch Exception:{ex.Message}");
+                        Log.Error($"Catch {Target.GetType().Name}.{Method.Name} Exception:{ex.Message}");
                     }
                 }
             }

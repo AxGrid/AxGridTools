@@ -35,6 +35,9 @@
     <Reference Include="MLog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\contrib\MLog.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\contrib\JSON_IL2CPP\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SmartFormat, Version=2.1.0.2, Culture=neutral, PublicKeyToken=568866805651201f">
       <HintPath>..\contrib\SmartFormat.dll</HintPath>
     </Reference>
@@ -60,6 +63,7 @@
     <Compile Include="Model\AsyncEventManager.cs" />
     <Compile Include="Model\AsyncExecutor.cs" />
     <Compile Include="Model\DynamicModel.cs" />
+    <Compile Include="Model\Options.cs" />
     <Compile Include="Model\SimpleModel.cs" />
     <Compile Include="Path\CPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AxGrid.Model;
 
 namespace AxGrid {
@@ -17,6 +18,10 @@ namespace AxGrid {
         /// </summary>
         public static FSM.FSM Fsm { get; set; }
 
+        /// <summary>
+        /// Опции
+        /// </summary>
+        public static Options Options { get; set; } = new Options();
 
         /// <summary>
         /// Вызвать события 
