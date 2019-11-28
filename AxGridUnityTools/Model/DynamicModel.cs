@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
+using UnityEngine.Scripting;
 
 namespace AxGrid.Model
 {
@@ -223,7 +224,7 @@ namespace AxGrid.Model
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
                 return def;
-            return (float)dataObject[name];
+            return Convert.ToSingle(dataObject[name]);
         }
         
         public long GetLong(string name, long def = default(long))
@@ -240,6 +241,7 @@ namespace AxGrid.Model
             return Convert.ToString(dataObject[name]);
         }
 
+        [Preserve]
         public T Get<T>(string name, T def = default(T))
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
@@ -247,6 +249,7 @@ namespace AxGrid.Model
             return (T)dataObject[name];
         }
 
+        [Preserve]
         public object Get(string name, object def = null)
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)

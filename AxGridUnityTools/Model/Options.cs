@@ -5,6 +5,7 @@ using SmartFormat;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace AxGrid.Model {
     
@@ -123,7 +124,7 @@ namespace AxGrid.Model {
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
                 return def;
-            return (float)dataObject[name];
+            return Convert.ToSingle(dataObject[name]);
         }
         
         public Options GetOptions(string name, Options def = default(Options))
@@ -146,7 +147,8 @@ namespace AxGrid.Model {
                 return def;
             return Convert.ToString(dataObject[name]);
         }
-
+        
+        [Preserve]
         public T Get<T>(string name, T def = default(T))
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
@@ -154,6 +156,7 @@ namespace AxGrid.Model {
             return (T)dataObject[name];
         }
 
+        [Preserve]
         public object Get(string name, object def = null)
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
@@ -225,6 +228,10 @@ namespace AxGrid.Model {
             var str = PlayerPrefs.GetString(name);
             return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
         }
+        
+        public static Options LoadFromString(string str) {
+            return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
+        }
 
         /// <summary>
         /// Считать из Unity3d PlayerPrefs
@@ -236,5 +243,10 @@ namespace AxGrid.Model {
             PlayerPrefs.SetString(name, json);
             if (save) PlayerPrefs.Save();
         }
+
+        public string SaveAsString(bool allKeys = false) {
+            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i));
+            return json;
+        } 
     }
 }

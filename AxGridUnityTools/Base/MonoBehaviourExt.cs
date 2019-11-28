@@ -6,6 +6,7 @@ using AxGrid.Model;
 using AxGrid.Path;
 using AxGrid.Utils;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace AxGrid.Base
 {
@@ -49,7 +50,7 @@ namespace AxGrid.Base
 					Exception th = e;
 					while (th.InnerException != null)
 						th = th.InnerException;
-					Log.Error($"{th.Message}\nin {Method.Name} target {GetTargetName()}\n{th.StackTrace}");
+					Debug.LogError($"{th.Message}\nin {Method.Name} target {GetTargetName()}\n{th.StackTrace}");
 				}
 			}
 
@@ -386,7 +387,7 @@ namespace AxGrid.Base
 
 	
 
-	public abstract class MonoBehaviourExtAttribute : Attribute, IComparable<MonoBehaviourExtAttribute>
+	public abstract class MonoBehaviourExtAttribute : PreserveAttribute, IComparable<MonoBehaviourExtAttribute>
 	{
 		public MethodInfo Method { get; set; }
 		public object Target { get; set; }
@@ -429,7 +430,6 @@ namespace AxGrid.Base
 		public void Update()
 		{
 			currentInterval += Time.deltaTime;
-
 			if (currentInterval >= Interval)
 			{
 				currentInterval -= Interval;

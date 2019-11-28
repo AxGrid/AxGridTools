@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AxGrid.Model;
 using SmartFormat;
+using UnityEngine.Scripting;
 
 
 namespace AxGrid.FSM
@@ -11,6 +12,7 @@ namespace AxGrid.FSM
     /// <summary>
     /// Состояние
     /// </summary>
+    [Preserve]
     public abstract class FSMState : IState
     {
 
@@ -23,6 +25,7 @@ namespace AxGrid.FSM
         /// <summary>
         /// Proxy
         /// </summary>
+        [Preserve]
         protected DynamicModel Model => Settings.Model;
 
         /// <summary>
