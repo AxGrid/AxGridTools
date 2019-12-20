@@ -93,12 +93,87 @@ namespace AxGrid.FSM
                 }
             }
         }
+
+        private class TimingObject {
+            private float _currentTime = 0.0f;
+            private float _resetTime = 0.0f;
+            private float _startTime = 0.0f;
+            private static readonly ILog Log = new ILog();// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            public float Time
+            {
+                get { return _resetTime; }
+            }
+
+            public bool Loop { get; protected set; }
+            public bool Enable { get; protected set; }
+            public object Target { get; set; }
+            public MethodInfo Method { get; set; }
+            public object[] Args = new object[0];
+            public int Priority = 0;
+            public string Name { get; set; }
+
+            public void Reset()
+            {
+                _currentTime = _startTime;
+                Enable = true;
+            }
+
+            public void Stop()
+            {
+                Enable = false;
+            }
+
+            public void Update(float deltaTime)
+            {
+                if (!Enable)
+                    return;
+                _currentTime -= deltaTime;
+                if (_currentTime > 0)
+                    return;
+            
+                try
+                {
+                    Method.Invoke(Target, Args);
+                }
+                catch (TargetInvocationException e)
+                {
+                    Exception thr = e;
+                
+                    while (thr.InnerException != null) {
+                        Log.Error($"Inner:{thr.Message}\n{thr.StackTrace}");
+                        thr = thr.InnerException;
+                    }
+                    Log.Error($"Final:{thr.Message}\n{thr.StackTrace}");
+                }
+            
+                if (Loop)
+                    _currentTime += _resetTime;
+                else
+                    Enable = false;
+            }
+
+            public static TimingObject fromAttribute(Timing attr) {
+                return new TimingObject(attr.ResetTime, attr.CurrentTime, attr.Loop) {
+                    Name = attr.Name, Priority = attr.Priority, Enable = attr.Enable
+                };
+            }
+            
+            public TimingObject(float resetTime, float currentTime, bool loop)
+            {
+           
+                _resetTime = resetTime;
+                _currentTime = currentTime;
+                _startTime = currentTime;
+                Loop = loop;
+            }
+
+        }
         
         private readonly List<MethodInfoObject> enters;
         private readonly List<MethodInfoObject> exits;
         private readonly List<MethodInfoObject> updates;
-        private readonly Dictionary<string, Timing> timersDictionary;
-        private readonly List<Timing> timers;
+        private readonly Dictionary<string, TimingObject> timersDictionary;
+        private readonly List<TimingObject> timers;
         
         public FSM Parent { get; set; }
         
@@ -110,7 +185,7 @@ namespace AxGrid.FSM
             enters = new List<MethodInfoObject>();
             exits = new List<MethodInfoObject>();
             updates = new List<MethodInfoObject>();
-            timersDictionary = new Dictionary<string, Timing>();
+            timersDictionary = new Dictionary<string, TimingObject>();
             
             foreach (var methodInfo in GetType()
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
@@ -127,7 +202,7 @@ namespace AxGrid.FSM
                         exits.Add(new MethodInfoObject {Method = methodInfo, Target = this, Priority = exit.Priority});
                     }else if (o.GetType() == typeof(Loop))
                     {
-                        var loop = (Loop) o;
+                        var loop = TimingObject.fromAttribute((Loop) o);
                         if (loop.Time == 0)
                             updates.Add(new MethodInfoObject
                             {
@@ -144,7 +219,7 @@ namespace AxGrid.FSM
                         break;
                     }else if (o.GetType() == typeof(One))
                     {
-                        var one = (One) o;
+                        var one = TimingObject.fromAttribute((One) o);
                         timersDictionary.Add(one.Name ?? methodInfo.Name, one);
                         one.Method = methodInfo;
                         one.Target = this;
@@ -272,13 +347,13 @@ namespace AxGrid.FSM
     /// </summary>
     public class Timing : Attribute
     {
-        private float _currentTime = 0.0f;
-        private float _resetTime = 0.0f;
-        private float _startTime = 0.0f;
-        private static readonly ILog Log = new ILog();// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public float CurrentTime { get; protected set; } = 0.0f;
+        public float ResetTime { get; protected set; } = 0.0f;
+        public float StartTime { get; protected set; } = 0.0f;
+        
         public float Time
         {
-            get { return _resetTime; }
+            get { return ResetTime; }
         }
 
         public bool Loop { get; protected set; }
@@ -286,55 +361,56 @@ namespace AxGrid.FSM
         public object Target { get; set; }
         public MethodInfo Method { get; set; }
         public object[] Args = new object[0];
+        
         public int Priority = 0;
         public string Name { get; set; }
 
-        public void Reset()
-        {
-            _currentTime = _startTime;
-            Enable = true;
-        }
-
-        public void Stop()
-        {
-            Enable = false;
-        }
-
-        public void Update(float deltaTime)
-        {
-            if (!Enable)
-                return;
-            _currentTime -= deltaTime;
-            if (_currentTime > 0)
-                return;
-            
-            try
-            {
-                Method.Invoke(Target, Args);
-            }
-            catch (TargetInvocationException e)
-            {
-                Exception thr = e;
-                
-                while (thr.InnerException != null) {
-                    Log.Error($"Inner:{thr.Message}\n{thr.StackTrace}");
-                    thr = thr.InnerException;
-                }
-                Log.Error($"Final:{thr.Message}\n{thr.StackTrace}");
-            }
-            
-            if (Loop)
-                _currentTime += _resetTime;
-            else
-                Enable = false;
-        }
+//        public void Reset()
+//        {
+//            _currentTime = _startTime;
+//            Enable = true;
+//        }
+//
+//        public void Stop()
+//        {
+//            Enable = false;
+//        }
+//
+//        public void Update(float deltaTime)
+//        {
+//            if (!Enable)
+//                return;
+//            _currentTime -= deltaTime;
+//            if (_currentTime > 0)
+//                return;
+//            
+//            try
+//            {
+//                Method.Invoke(Target, Args);
+//            }
+//            catch (TargetInvocationException e)
+//            {
+//                Exception thr = e;
+//                
+//                while (thr.InnerException != null) {
+//                    Log.Error($"Inner:{thr.Message}\n{thr.StackTrace}");
+//                    thr = thr.InnerException;
+//                }
+//                Log.Error($"Final:{thr.Message}\n{thr.StackTrace}");
+//            }
+//            
+//            if (Loop)
+//                _currentTime += _resetTime;
+//            else
+//                Enable = false;
+//        }
 
         public Timing(float resetTime, float currentTime, bool loop)
         {
            
-            _resetTime = resetTime;
-            _currentTime = currentTime;
-            _startTime = currentTime;
+            ResetTime = resetTime;
+            CurrentTime = currentTime;
+            StartTime = currentTime;
             Loop = loop;
         }
         
