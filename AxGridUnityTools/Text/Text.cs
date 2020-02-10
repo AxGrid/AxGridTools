@@ -40,8 +40,10 @@ namespace AxGrid.Text
         {
             if (!format.StartsWith("app."))
                 return format;
-            try
-            {
+            try {
+                var test = Sf.Format("{" + format + "}", Repository.Translations);
+                if (test == "System.Collections.Generic.Dictionary`2[System.Object,System.Object]")
+                    throw new ArgumentException("Map found!");
                 return Sf.Format("{" + format + "}", Repository.Translations);
             }
             catch (Exception)
@@ -58,8 +60,10 @@ namespace AxGrid.Text
 
         private static string _Get(string var)
         {
-            if (!var.StartsWith("app."))
+            if (!var.StartsWith("app.")) {
                 return var;
+            }
+
             try
             {
                 return Sf.Format("{" + var + "}", Repository.Translations);
