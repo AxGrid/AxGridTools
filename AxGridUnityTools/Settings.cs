@@ -9,6 +9,11 @@ namespace AxGrid {
         public static DynamicModel Model { get; set; } = new SimpleModel();
         
         /// <summary>
+        /// Глобальная модель
+        /// </summary>
+        public static DynamicModel GlobalModel { get; set; } = new SimpleModel();
+        
+        /// <summary>
         /// Языки
         /// </summary>
         public static string[] Languages { get; set; } = {"ru"};

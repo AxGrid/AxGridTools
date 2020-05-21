@@ -368,6 +368,11 @@ namespace AxGrid.Path
             return Apply(path, action, EasingTo.CubicEaseOut, from, to, time);            
         }
         
+        public static CPath EasingCubicEaseOutIn(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.CubicEaseOutIn, from, to, time);            
+        }
+        
         public static CPath EasingQuadEaseIn(this CPath path, float time, float from, float to, CPathEasingAction action)
         {
             return Apply(path, action, EasingTo.QuadEaseIn, from, to, time);            
@@ -382,6 +387,42 @@ namespace AxGrid.Path
         public static CPath EasingQuadEaseOut(this CPath path, float time, float from, float to, CPathEasingAction action)
         {
             return Apply(path, action, EasingTo.QuadEaseOut, from, to, time);            
+        }
+        
+        public static CPath EasingQuadEaseOutIn(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+                        
+            return Apply(path, action, EasingTo.QuadEaseOutIn, from, to, time);            
+        }
+        
+        public static CPath EasingBounceEaseIn(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.BounceEaseIn, from, to, time);      
+        }
+        
+        public static CPath EasingBounceEaseOut(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.BounceEaseOut, from, to, time);      
+        }
+        
+        public static CPath EasingElasticEaseIn(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.ElasticEaseIn, from, to, time);      
+        }
+        
+        public static CPath EasingElasticEaseOut(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.ElasticEaseOut, from, to, time);      
+        }
+        
+        public static CPath EasingBounceEaseInOut(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.BounceEaseInOut, from, to, time);      
+        }
+        
+        public static CPath EasingBounceEaseOutIn(this CPath path, float time, float from, float to, CPathEasingAction action)
+        {
+            return Apply(path, action, EasingTo.BounceEaseOutIn, from, to, time);      
         }
     }
 

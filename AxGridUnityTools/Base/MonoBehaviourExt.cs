@@ -66,15 +66,20 @@ namespace AxGrid.Base
 			public float CurrentInterval { get; set; }
 			public bool IsUpdated { get; set; }
 			
-			public bool Update()
+			public bool Update(float time)
 			{
 				if (IsUpdated)
 					return true;
-				CurrentInterval += Time.deltaTime;
+				CurrentInterval += time;
 				if (!(CurrentInterval >= Interval)) return false;
 				Invoke();
 				IsUpdated = true;
 				return true;
+			}
+
+			public bool Update()
+			{
+				return Update(Time.deltaTime);
 			}
 
 			public int CompareTo(DelayAttributeInstance other)
@@ -93,12 +98,17 @@ namespace AxGrid.Base
 			public float CurrentInterval { get; set; }
 			public float Interval { get; set; }
 
-			public void Update()
+			public void Update(float time)
 			{
-				CurrentInterval += Time.deltaTime;
+				CurrentInterval += time;
 				if (!(CurrentInterval >= Interval)) return;
 				CurrentInterval -= Interval;
 				Invoke();
+			}
+			
+			public void Update()
+			{
+				Update(Time.deltaTime);
 			}
 			
 			public int CompareTo(RefreshAttributeInstance other)
@@ -209,16 +219,15 @@ namespace AxGrid.Base
 					a.Invoke();
 		}
 
-		
 		// Update is called once per frame
 		public void Update()
 		{
+			var dt = Time.deltaTime;
 			if (delayList != null && delayList.Count > 0)
 			{
 				var updated = false;
-
 				foreach (var a in delayList)
-					if (a.Update())
+					if (a.Update(dt))
 						updated = true;
 
 				if (updated)
@@ -226,14 +235,16 @@ namespace AxGrid.Base
 				if (delayList.Count == 0)
 					delayList = null;
 			}
+			foreach (var a in refreshList)
+				a.Update(dt);
+			
+
 			foreach (var a in updateList)
 				a.Invoke();
 
-			foreach (var a in refreshList)
-				a.Update();
 			if (IsPathAnimated)
-				path.Update(Time.deltaTime);
-			pathCollection.Where(item => item.IsPlaying).ForEach(item => item.Update(Time.deltaTime));
+				path.Update(dt);
+			pathCollection.Where(item => item.IsPlaying).ForEach(item => item.Update(dt));
 			if (pathCollection.Count > 0) pathCollection.RemoveAll(item => !item.IsPlaying);
 		}
 

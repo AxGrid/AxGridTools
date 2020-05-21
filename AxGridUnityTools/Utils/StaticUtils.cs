@@ -64,7 +64,6 @@ namespace AxGrid.Utils
             return list;
         }
         
-        
         public static Dictionary<T1, T2> UnionDictionaries<T1, T2>(Dictionary<T1, T2> D2, Dictionary<T1, T2> D1)
         {
             var rd = new Dictionary<T1, T2>(D1);
@@ -85,6 +84,28 @@ namespace AxGrid.Utils
                 }
             }
             return rd;
+        }
+
+        public static Dictionary<string, object> ClearEmptyStringsFromDictionaries(Dictionary<object, object> rd)
+        {
+            var res = new Dictionary<string, object>(); 
+            foreach(var key in rd.Keys)
+            {
+                if (rd[key].GetType() == typeof(Dictionary<object, object>))
+                {
+                    var invocationResult = ClearEmptyStringsFromDictionaries((Dictionary<object, object>)rd[key]);
+                    res.Add(key.ToString(), invocationResult);
+                } else if (rd[key] is string)
+                {
+                    var text = rd[key] as string;
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        res.Add(key.ToString(), rd[key]);
+                    }
+                }
+            }
+
+            return res;
         }
 
         public static string StringsAggregation(string a, string b) => a + "," + b;
