@@ -5,6 +5,17 @@ using NUnit.Framework;
 namespace AxGridToolsTest {
     [TestFixture]
     public class Tests {
+
+        [Test]
+        public void TestUlong()
+        {
+            var model = new SimpleModel();
+            ulong d = 15;
+            model.Set("ulong", d);
+            Assert.AreEqual(model.GetLong("ulong"), 15L);
+        }
+
+
         [Test]
         public void Test1() {
             var opt = new Options();

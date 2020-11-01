@@ -1,13 +1,24 @@
 using System;
+using AxGrid.Model;
+using UnityEngine;
 
 namespace AxGrid.Base {
-    public abstract class MonoBehaviourExt2DBind : MonoBehaviourExt2D {
+    public class MonoBehaviourExt2DBind : MonoBehaviourExt2D {
+        
+        [Tooltip("Use Global Model")]
+        public bool globalModel = false;
+
+        /// <summary>
+        /// Proxy
+        /// </summary>
+        protected override DynamicModel Model => globalModel ? Settings.GlobalModel : Settings.Model; 
+        
         [OnStart(-100)]
         protected void __Bind()
         {
             try
             {
-                Settings.Model.EventManager.Add(this);
+                Model.EventManager.Add(this);
             }
             catch (NullReferenceException e)
             {
@@ -18,11 +29,11 @@ namespace AxGrid.Base {
         [OnDestroy(int.MaxValue)]
         protected void __UnBind()
         {
-            if (Settings.Model == null)
+            if (Model == null)
                 return;
             try
             {
-                Settings.Model.EventManager.Remove(this);
+                Model.EventManager.Remove(this);
             }
             catch (NullReferenceException e)
             {

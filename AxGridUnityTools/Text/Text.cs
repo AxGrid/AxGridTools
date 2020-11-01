@@ -22,7 +22,7 @@ namespace AxGrid.Text
         {
             get
             {
-                if (sf == null) Init(new []{"ru"});
+                if (Repository == null) Init(new []{"ru"});
                 return sf;
             }
         }

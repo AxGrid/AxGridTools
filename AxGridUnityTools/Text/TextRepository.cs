@@ -18,12 +18,11 @@ namespace AxGrid.Text {
                 var t = Resources.Load(file) as TextAsset;
                 Log.Debug($"Load translations file {file}");
                 var deserializer = new Deserializer();
-                
-                var obj = (Dictionary<string, object>) deserializer.Deserialize(
+                var obj = (Dictionary<object, object>) deserializer.Deserialize(
                     new StringReader(t.text),
-                    typeof(Dictionary<string, object>)
+                    typeof(Dictionary<object, object>)
                 );
-                Translations = StaticUtils.UnionDictionaries(Translations, obj);
+                Translations = StaticUtils.UnionDictionaries(Translations, StaticUtils.ClearEmptyStringsFromDictionaries(obj));
             }
         }
         

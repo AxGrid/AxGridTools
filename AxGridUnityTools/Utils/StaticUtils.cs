@@ -226,5 +226,22 @@ namespace AxGrid.Utils
             return new Vector3(vector.x, vector.y, value);
         }
         
+        public static string Base64EncodeText(string plainText) {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+        
+        public static string Base64DecodeText(string base64EncodedData) {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+        
+        public static string Base64Encode(byte[] data) {
+            return Convert.ToBase64String(data);
+        }
+        
+        public static byte[] Base64Decode(string base64EncodedData) {
+            return System.Convert.FromBase64String(base64EncodedData);
+        }
     }
 }

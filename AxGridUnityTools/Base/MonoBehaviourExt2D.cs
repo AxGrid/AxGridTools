@@ -4,7 +4,7 @@ using AxGrid.Utils;
 using UnityEngine;
 
 namespace AxGrid.Base {
-    public abstract class MonoBehaviourExt2D : MonoBehaviourExt {
+    public class MonoBehaviourExt2D : MonoBehaviourExt {
         
         protected SpriteRenderer SpriteRenderer { get; set; }
 

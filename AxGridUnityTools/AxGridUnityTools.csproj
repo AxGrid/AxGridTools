@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Binder.cs" />
     <Compile Include="Base\MonoBehaviourExt.cs" />
     <Compile Include="Base\MonoBehaviourExt2D.cs" />
     <Compile Include="Base\MonoBehaviourExt2DBind.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="FSM\FSMState.cs" />
     <Compile Include="Model\AsyncEventManager.cs" />
     <Compile Include="Model\AsyncExecutor.cs" />
+    <Compile Include="Model\DynamicList.cs" />
     <Compile Include="Model\DynamicModel.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\SimpleModel.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
     <Compile Include="Text\TextRepository.cs" />
+    <Compile Include="Tools\SpriteCollection.cs" />
     <Compile Include="Utils\DictionaryHelper.cs" />
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />

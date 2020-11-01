@@ -142,13 +142,23 @@ namespace AxGrid.Model
             {
                 if (dataObject[name] != obj)
                 {
-                    var before = dataObject[name]; 
+                    var before = dataObject[name];
+                    if (obj is IDynamicList list)
+                    {
+                        list.ModelLink = this;
+                        list.ModelField = name;
+                    }
                     dataObject[name] = obj;
                     SendEvents(name, obj, before);
                 }
             }
             else
             {
+                if (obj is IDynamicList list)
+                {
+                    list.ModelLink = this;
+                    list.ModelField = name;
+                }
                 dataObject.Add(name, obj);
                 SendEvents(name, obj, null);
             }

@@ -10,7 +10,7 @@ using UnityEngine.Scripting;
 
 namespace AxGrid.Base
 {
-	public abstract class MonoBehaviourExt : MonoBehaviour
+	public class MonoBehaviourExt : MonoBehaviour
 	{
 		private List<BaseAttributeInstance> awakeList;
 		private List<BaseAttributeInstance> destroyList;
@@ -23,10 +23,11 @@ namespace AxGrid.Base
 		private List<BaseAttributeInstance> enableList;
 		private List<BaseAttributeInstance> disableList;
 
+		
 		/// <summary>
 		/// Proxy
 		/// </summary>
-		protected static DynamicModel Model => Settings.Model;
+		protected virtual DynamicModel Model => Settings.Model; 
 		
 		private class BaseAttributeInstance :  IComparable<BaseAttributeInstance>
 		{
