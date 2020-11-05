@@ -165,17 +165,36 @@ namespace AxGrid.Model
                 {
                     if (attr.GetType() != typeof(Bind)) continue;
                     var e = (Bind) attr;
-                    var eventName = e.EventName ?? methodInfo.Name;
-                    if (eventName.Contains("{"))
-                        eventName = Smart.Format(eventName, obj);
-                    
-                    if (!_eventListeners.ContainsKey(eventName))
-                        _eventListeners.Add(eventName, new List<MethodInfoObject>());
-                    var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
-                    if (!_eventListeners[eventName].Contains(mio))
-                        _eventListeners[eventName].Add(mio);
+                    Add(e, obj, methodInfo);
+                    // var eventName = e.EventName ?? methodInfo.Name;
+                    // if (eventName.Contains("{"))
+                    //     eventName = Smart.Format(eventName, obj);
+                    //
+                    // if (!_eventListeners.ContainsKey(eventName))
+                    //     _eventListeners.Add(eventName, new List<MethodInfoObject>());
+                    // var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
+                    // if (!_eventListeners[eventName].Contains(mio))
+                    //     _eventListeners[eventName].Add(mio);
                 }
             }
+        }
+
+        public void Add(Bind bind, object obj, MethodInfo methodInfo, bool global = false)
+        {
+
+            if (bind.Global && !global)
+            {
+                Settings.GlobalModel.EventManager.Add(bind, obj, methodInfo, true);
+                return;
+            }
+            
+            var eventName = bind.EventName ?? methodInfo.Name;
+            if (eventName.Contains("{"))
+                eventName = Smart.Format(eventName, obj);
+            
+            var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
+            if (!_eventListeners.ContainsKey(eventName))
+                _eventListeners.Add(eventName, new List<MethodInfoObject>());
         }
 
         private void Add(MethodInfoObject mio, string newEventName = "")
@@ -649,6 +668,8 @@ namespace AxGrid.Model
         public string EventName { get; protected set; }
         
         public string[] Except { get; protected set; }
+
+        public bool Global { get; protected set; } = false;
         
         /// <summary>
         /// Имя события будет имя метода маленькими буквами
@@ -665,10 +686,11 @@ namespace AxGrid.Model
         }
         
         
-        public Bind(string eventName=null, string[] except = null)
+        public Bind(string eventName=null, string[] except = null, bool global = false)
         {
             EventName = eventName;
             Except = except;
+            Global = global;
         }
     }
 }

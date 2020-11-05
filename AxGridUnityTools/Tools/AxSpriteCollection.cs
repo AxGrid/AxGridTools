@@ -8,7 +8,7 @@ namespace AxGrid.Tools
     /**
      * Коллекция спрайта
      */
-    public class SpriteCollection : MonoBehaviourExt
+    public class AxSpriteCollection : MonoBehaviourExt
     {
         public string collectionName = "";
         [Serializable]
@@ -23,6 +23,7 @@ namespace AxGrid.Tools
         protected static long lastIndex = 0;
         public static Dictionary<string, Dictionary<long, Sprite>> spriteIndexes = new Dictionary<string, Dictionary<long, Sprite>>();
         public static Dictionary<string, Dictionary<string, Sprite>> spriteNames = new Dictionary<string, Dictionary<string, Sprite>>();
+        public static Dictionary<string, Dictionary<string, long>> spriteIds = new Dictionary<string, Dictionary<string, long>>();
         public static HashSet<string> loadedCollections = new HashSet<string>();
 
         [OnAwake]
@@ -34,6 +35,7 @@ namespace AxGrid.Tools
             loadedCollections.Add(collectionName);
             if (!spriteIndexes.ContainsKey(collectionName)) spriteIndexes.Add(collectionName, new Dictionary<long, Sprite>());
             if (!spriteNames.ContainsKey(collectionName)) spriteNames.Add(collectionName, new Dictionary<string, Sprite>());
+            if (!spriteIds.ContainsKey(collectionName)) spriteIds.Add(collectionName, new Dictionary<string, long>());
             foreach (var data in sprites)
             {
                 if (data.index == -1) data.index = lastIndex++;
@@ -44,6 +46,11 @@ namespace AxGrid.Tools
 
                 if (!string.IsNullOrEmpty(data.name))
                     data.name = data.sprite.name;
+
+                if (spriteIds[collectionName].ContainsKey(data.name))
+                    spriteIds[collectionName][data.name] = data.index;
+                else
+                    spriteIds[collectionName].Add(data.name, data.index);
                 
                 if (spriteNames[collectionName].ContainsKey(data.name))
                     spriteNames[collectionName][data.name] = data.sprite;
@@ -52,22 +59,32 @@ namespace AxGrid.Tools
             }
         }
 
-        public static Sprite getSprite(string collection, long index)
+        public static Sprite GetSprite(string collection, long index)
         {
             if (!spriteIndexes.ContainsKey(collection)) return null;
             if (!spriteIndexes[collection].ContainsKey(index)) return null;
             return spriteIndexes[collection][index];
         }
 
-        public static Sprite getSprite(string collection, string name)
+        public static Sprite GetSprite(string collection, string name)
         {
             if (!spriteNames.ContainsKey(collection)) return null;
             if (!spriteNames[collection].ContainsKey(name)) return null;
             return spriteNames[collection][name];
         }
         
+        /**
+         * Получить ID по имени спрайта
+         */
+        public static long GetSpriteId(string collection, string name)
+        {
+            if (!spriteIds.ContainsKey(collection)) return -1;
+            if (!spriteIds[collection].ContainsKey(name)) return -1;
+            return spriteIds[collection][name];
+        } 
         
 
+        
     }
     
 }

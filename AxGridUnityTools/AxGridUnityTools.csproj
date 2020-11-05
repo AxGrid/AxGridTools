@@ -75,7 +75,8 @@
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
     <Compile Include="Text\TextRepository.cs" />
-    <Compile Include="Tools\SpriteCollection.cs" />
+    <Compile Include="Tools\AxSprite.cs" />
+    <Compile Include="Tools\AxSpriteCollection.cs" />
     <Compile Include="Utils\DictionaryHelper.cs" />
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />
