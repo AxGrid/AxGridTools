@@ -27,7 +27,7 @@ namespace AxGrid.Model
         /// <summary>
         /// Класс хранения объекта и метода
         /// </summary>
-        private class MethodInfoObject
+        protected class MethodInfoObject
         {
             public MethodInfo Method { get; set; }
             public object Target { get; set; }
@@ -165,7 +165,8 @@ namespace AxGrid.Model
                 {
                     if (attr.GetType() != typeof(Bind)) continue;
                     var e = (Bind) attr;
-                    Add(e, obj, methodInfo);
+                    var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
+                    Add(e, mio);
                     // var eventName = e.EventName ?? methodInfo.Name;
                     // if (eventName.Contains("{"))
                     //     eventName = Smart.Format(eventName, obj);
@@ -179,22 +180,22 @@ namespace AxGrid.Model
             }
         }
 
-        public void Add(Bind bind, object obj, MethodInfo methodInfo, bool global = false)
+        protected void Add(Bind bind, MethodInfoObject mio, bool global = false)
         {
 
             if (bind.Global && !global)
             {
-                Settings.GlobalModel.EventManager.Add(bind, obj, methodInfo, true);
+                Settings.GlobalModel.EventManager.Add(bind, mio, true);
                 return;
             }
-            
-            var eventName = bind.EventName ?? methodInfo.Name;
+            var eventName = bind.EventName ?? mio.Method.Name;
             if (eventName.Contains("{"))
-                eventName = Smart.Format(eventName, obj);
+                eventName = Smart.Format(eventName, mio.Target);
             
-            var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
             if (!_eventListeners.ContainsKey(eventName))
                 _eventListeners.Add(eventName, new List<MethodInfoObject>());
+            if (!_eventListeners[eventName].Contains(mio))
+                _eventListeners[eventName].Add(mio);
         }
 
         private void Add(MethodInfoObject mio, string newEventName = "")
@@ -207,11 +208,13 @@ namespace AxGrid.Model
                 {
                     if (attr.GetType() != typeof(Bind)) continue;
                     var e = (Bind) attr;
-                    eventName = newEventName != "" ? newEventName : e.EventName ?? mio.Method.Name;
-                    if (!_eventListeners.ContainsKey(eventName))
-                        _eventListeners.Add(eventName, new List<MethodInfoObject>());
-                    if (!_eventListeners[eventName].Contains(mio))
-                        _eventListeners[eventName].Add(mio);
+                    Add(e, mio);
+                    // eventName = newEventName != "" ? newEventName : e.EventName ?? mio.Method.Name;
+                    // if (!_eventListeners.ContainsKey(eventName))
+                    //     _eventListeners.Add(eventName, new List<MethodInfoObject>());
+                    // if (!_eventListeners[eventName].Contains(mio))
+                    //     _eventListeners[eventName].Add(mio);
+
                 }
             }
             else
