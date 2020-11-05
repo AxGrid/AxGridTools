@@ -180,15 +180,14 @@ namespace AxGrid.Model
             }
         }
 
-        protected void Add(Bind bind, MethodInfoObject mio, bool global = false)
+        protected void Add(Bind bind, MethodInfoObject mio, bool global = false, string realEventName=null)
         {
-
             if (bind.Global && !global)
             {
-                Settings.GlobalModel.EventManager.Add(bind, mio, true);
+                Settings.GlobalModel.EventManager.Add(bind, mio, true, realEventName);
                 return;
             }
-            var eventName = bind.EventName ?? mio.Method.Name;
+            var eventName = !string.IsNullOrEmpty(realEventName) ? realEventName : bind.EventName ?? mio.Method.Name;
             if (eventName.Contains("{"))
                 eventName = Smart.Format(eventName, mio.Target);
             
@@ -208,7 +207,8 @@ namespace AxGrid.Model
                 {
                     if (attr.GetType() != typeof(Bind)) continue;
                     var e = (Bind) attr;
-                    Add(e, mio);
+                    eventName = newEventName != "" ? newEventName : e.EventName ?? mio.Method.Name;
+                    Add(e, mio, realEventName: eventName);
                     // eventName = newEventName != "" ? newEventName : e.EventName ?? mio.Method.Name;
                     // if (!_eventListeners.ContainsKey(eventName))
                     //     _eventListeners.Add(eventName, new List<MethodInfoObject>());
