@@ -81,9 +81,13 @@ namespace AxGrid.Tools
             if (!spriteIds.ContainsKey(collection)) return -1;
             if (!spriteIds[collection].ContainsKey(name)) return -1;
             return spriteIds[collection][name];
-        } 
-        
+        }
 
+        public bool Contains(string collection, string name)
+        {
+            if (!spriteNames.ContainsKey(collection)) return false;
+            return spriteNames[collection].ContainsKey(name);
+        }
         
     }
     
