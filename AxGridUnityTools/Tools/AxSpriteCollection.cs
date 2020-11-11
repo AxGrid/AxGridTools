@@ -44,7 +44,7 @@ namespace AxGrid.Tools
                 else
                     spriteIndexes[collectionName].Add(data.index, data.sprite);
 
-                if (!string.IsNullOrEmpty(data.name))
+                if (string.IsNullOrEmpty(data.name))
                     data.name = data.sprite.name;
 
                 if (spriteIds[collectionName].ContainsKey(data.name))
@@ -59,17 +59,17 @@ namespace AxGrid.Tools
             }
         }
 
-        public static Sprite GetSprite(string collection, long index)
+        public static Sprite GetSprite(string collection, long index, Sprite def = null)
         {
-            if (!spriteIndexes.ContainsKey(collection)) return null;
-            if (!spriteIndexes[collection].ContainsKey(index)) return null;
+            if (!spriteIndexes.ContainsKey(collection)) return def;
+            if (!spriteIndexes[collection].ContainsKey(index)) return def;
             return spriteIndexes[collection][index];
         }
 
-        public static Sprite GetSprite(string collection, string name)
+        public static Sprite GetSprite(string collection, string name, Sprite def = null)
         {
-            if (!spriteNames.ContainsKey(collection)) return null;
-            if (!spriteNames[collection].ContainsKey(name)) return null;
+            if (!spriteNames.ContainsKey(collection)) return def;
+            if (!spriteNames[collection].ContainsKey(name)) return def;
             return spriteNames[collection][name];
         }
         
