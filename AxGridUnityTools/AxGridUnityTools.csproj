@@ -62,6 +62,7 @@
     <Compile Include="Flow\Flow.cs" />
     <Compile Include="Flow\FlowBuilder.cs" />
     <Compile Include="Flow\FlowContext.cs" />
+    <Compile Include="Flow\FlowOnBuilder.cs" />
     <Compile Include="Flow\FlowTerminateException.cs" />
     <Compile Include="Flow\IFlowContext.cs" />
     <Compile Include="FSM\FSM.cs" />

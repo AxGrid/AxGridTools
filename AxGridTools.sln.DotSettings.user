@@ -6,5 +6,6 @@
     &lt;TestId&gt;NUnit3x::E5A6B056-723B-4428-87AB-E7D01DF9F0C1::.NETFramework,Version=v4.5::AxGridToolsTest.FlowTest.CheckDefaultState&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::E5A6B056-723B-4428-87AB-E7D01DF9F0C1::.NETFramework,Version=v4.5::AxGridToolsTest.FlowTest.NullableEnumTest&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::E5A6B056-723B-4428-87AB-E7D01DF9F0C1::.NETFramework,Version=v4.5::AxGridToolsTest.FlowTest.ExcTest&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::E5A6B056-723B-4428-87AB-E7D01DF9F0C1::.NETFramework,Version=v4.5::AxGridToolsTest.FlowTest.CreateFlowAndExecute&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

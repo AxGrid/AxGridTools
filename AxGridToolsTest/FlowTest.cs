@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AxGrid.Flow;
 using AxGrid.Utils;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace AxGridToolsTest
 {
@@ -12,7 +13,8 @@ namespace AxGridToolsTest
         public enum States
         {
             First,
-            Second
+            Second,
+            Error
         }
 
         public enum Action
@@ -39,6 +41,7 @@ namespace AxGridToolsTest
 
             var t = typeof(MyException);
             Assert.True(t.IsInstanceOfType(s));
+            Assert.True(typeof(Exception).IsInstanceOfType(s));
         }
         
         [Test]
@@ -60,9 +63,30 @@ namespace AxGridToolsTest
         {
             var flow = Flow<FlowContext<States, Action>, States, Action>.create(States.First)
                 .When(States.First, (c) => c.State = States.Second)
-                .Transition(States.Second, Action.Tick, States.First)
-                
+                .To(States.Second, Action.Tick, States.First)
+                .On(States.First, (state) =>
+                {
+                    state
+                        .Catch(typeof(MyException), States.Error, terminate: true)
+                        .Catch((ctx, e) => Console.WriteLine("ERROR:{0}", e.Message))
+                        .When(Action.Tick, (ctx) =>
+                        {
+                            Console.WriteLine("Tick in First");
+                        }).When(Action.Error, (ctx) =>
+                        {
+                            throw new MySubException();
+                        });
+                })
+                .Catch(typeof(Exception), (context) =>
+                {
+                    Console.WriteLine("Exception");
+                })
                 .Build();
+
+            var myContext = new FlowContext<States, Action>();
+            flow.Execute(myContext, Action.Tick);
+            flow.Execute(myContext, Action.Error);
+            Assert.AreEqual(myContext.State, States.Error);
         }
     }
 }

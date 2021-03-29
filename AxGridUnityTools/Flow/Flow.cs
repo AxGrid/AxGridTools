@@ -25,7 +25,7 @@ namespace AxGrid.Flow
         private readonly NullableDict<S?, List<ExceptionHolder>> exceptions =
             new NullableDict<S?, List<ExceptionHolder>>();
         
-        private S? startState;
+        private S startState;
 
         internal void Add(S? state, A? action, DFlowAction method)
         {
@@ -114,7 +114,7 @@ namespace AxGrid.Flow
         private IEnumerable<ActionHolder> GetAllActions(S? state, A? action)
         {
             if (action == null) return actions[state][null];
-            var empty = actions[state][null];
+            var empty = actions.ContainsKey(null) ? actions[state][null] : new List<ActionHolder>();
             var notEmpty = actions[state][action];
             return empty.Concat(notEmpty).OrderBy(item => item.Id);
         }
@@ -126,8 +126,13 @@ namespace AxGrid.Flow
 
         private Flow(S startState)
         {
-            foreach(var value in Enum.GetValues(typeof(S)))
-                actions.Add((S)value, new NullableDict<A?, List<ActionHolder>>());
+            this.startState = startState;
+            foreach (var value in Enum.GetValues(typeof(S)))
+            {
+                actions.Add((S) value, new NullableDict<A?, List<ActionHolder>>());
+                exceptions.Add((S) value, new List<ExceptionHolder>());
+            }
+
         }
 
         public class ActionHolder
