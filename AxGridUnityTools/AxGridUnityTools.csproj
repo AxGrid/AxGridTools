@@ -59,6 +59,11 @@
     <Compile Include="Base\MonoBehaviourExt2D.cs" />
     <Compile Include="Base\MonoBehaviourExt2DBind.cs" />
     <Compile Include="Base\MonoBehaviourExtBind.cs" />
+    <Compile Include="Flow\Flow.cs" />
+    <Compile Include="Flow\FlowBuilder.cs" />
+    <Compile Include="Flow\FlowContext.cs" />
+    <Compile Include="Flow\FlowTerminateException.cs" />
+    <Compile Include="Flow\IFlowContext.cs" />
     <Compile Include="FSM\FSM.cs" />
     <Compile Include="FSM\FSMState.cs" />
     <Compile Include="Model\AsyncEventManager.cs" />
@@ -80,6 +85,9 @@
     <Compile Include="Utils\DictionaryHelper.cs" />
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />
+    <Compile Include="Utils\NullableDict.cs" />
+    <Compile Include="Utils\NullableDictionary.cs" />
+    <Compile Include="Utils\NullObject.cs" />
     <Compile Include="Utils\Numbers.cs" />
     <Compile Include="Utils\StaticUtils.cs" />
   </ItemGroup>
