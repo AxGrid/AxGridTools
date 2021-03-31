@@ -52,7 +52,7 @@ namespace AxGrid.Text {
                 {
                     try
                     {
-                        return Resources.Load(file) as TextAsset);
+                        return Resources.Load(file) as TextAsset;
                     }
                     catch (Exception e)
                     {
