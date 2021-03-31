@@ -78,6 +78,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SmartFormat\PointFormater.cs" />
     <Compile Include="SmartFormat\TemplateFormater.cs" />
+    <Compile Include="Text\Codes.cs" />
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
     <Compile Include="Text\TextRepository.cs" />
