@@ -65,7 +65,7 @@ namespace AxGrid.Text
             try
             {
                 if (Repository.Translations.ContainsKey(var))
-                    return "{" + Repository.Get(var) + "}";
+                    return Repository.Get(var);
                 return var;
             }
             catch (Exception)
