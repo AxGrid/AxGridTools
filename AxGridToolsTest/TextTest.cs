@@ -78,7 +78,6 @@ app:
             tr = new TextRepository(new[] {textEn, textRu});
             Assert.AreEqual(tr.Translations["app.main.shop"], "Shop");
             Assert.AreEqual(tr.Translations["app.main.tournament"], "Tournament");
-            Assert.AreEqual(tr.Translations["app.main.tournament"], "Tournament");
         }
 
 

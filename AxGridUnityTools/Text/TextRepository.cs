@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,8 +48,19 @@ namespace AxGrid.Text {
                      Log.Debug($"Load language resource from {name} ...");
                      return name;
                 })
-                    .Select(file => Resources.Load(file) as TextAsset)
-                    .Select(t => t.text)
+                    .Select(file =>
+                {
+                    try
+                    {
+                        return Resources.Load(file) as TextAsset);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                })
+                .Where(item => item != null)
+                .Select(t => t.text)
                 .ToList();
             return new TextRepository(texts);
         }
