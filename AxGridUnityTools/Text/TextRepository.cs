@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AxGrid.Utils;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -7,23 +8,49 @@ using YamlDotNet.Serialization;
 namespace AxGrid.Text {
     public class TextRepository : ITextRepository {
         
-        public Dictionary<string, object> Translations { get; set; }
-        
-        public TextRepository(IEnumerable<string> languageCodes)
+        public Dictionary<string, string> Translations { get; set; }
+
+        public string Get(string key, string def = null)
         {
-            Translations = new Dictionary<string, object>();
-            foreach (var languageCode in languageCodes)
+            return Translations.ContainsKey(key) ? Translations[key] : def;
+        }
+        
+        private TextRepository()
+        {
+            Translations = new Dictionary<string, string>();
+        }
+        
+        /**
+         * Fallback languages codes
+         */
+        public TextRepository(IEnumerable<string> languageYamlSources)
+        {
+            var d = new Dictionary<string, string>();
+            foreach (var text in languageYamlSources.Reverse())
             {
-                var file = $"Translations/{languageCode}_out.yml";
-                var t = Resources.Load(file) as TextAsset;
-                Log.Debug($"Load translations file {file}");
                 var deserializer = new Deserializer();
                 var obj = (Dictionary<object, object>) deserializer.Deserialize(
-                    new StringReader(t.text),
+                    new StringReader(text),
                     typeof(Dictionary<object, object>)
                 );
-                Translations = StaticUtils.UnionDictionaries(Translations, StaticUtils.ClearEmptyStringsFromDictionaries(obj));
+                d = DictionaryHelper.UnionDictionaries(d, obj.FlattenKeys());
             }
+
+            Translations = d;
+        }
+
+        public static TextRepository FromResources(IEnumerable<string> languageCodes)
+        {
+            var texts = languageCodes.Select(languageCode => $"Translations/{languageCode}_out.yml")
+                .Select(name =>
+                {
+                     Log.Debug($"Load language resource from {name} ...");
+                     return name;
+                })
+                    .Select(file => Resources.Load(file) as TextAsset)
+                    .Select(t => t.text)
+                .ToList();
+            return new TextRepository(texts);
         }
         
         public bool HasKey(string key)

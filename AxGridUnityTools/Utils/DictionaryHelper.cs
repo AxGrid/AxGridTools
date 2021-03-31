@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace AxGrid.Utils
@@ -37,5 +38,32 @@ namespace AxGrid.Utils
             return rd;
         }
         #endregion
+
+
+        public static Dictionary<string, string> FlattenKeys(this Dictionary<object, object> d, string delimiter = ".")
+        {
+            var res = new Dictionary<string, string>();
+            FlattenDictionaryPart(ref res, d, "", delimiter);
+            return res;
+        }
+
+        private static void FlattenDictionaryPart(ref Dictionary<string, string> d, Dictionary<object, object> part,
+            string prefix, string delimiter = ".")
+        {
+            foreach (var k in part.Keys)
+            {
+                var val = part[k];
+                if (val is Dictionary<object, object> d2)
+                {
+                    FlattenDictionaryPart(ref d, d2, prefix + $"{k}{delimiter}", delimiter);
+                } else if (val is string s)
+                {
+                    d.Add($"{prefix}{k}", s);
+                } else if (val is object o)
+                {
+                    d.Add($"{prefix}{k}", o.ToString());
+                }
+            }
+        }
     }
 }

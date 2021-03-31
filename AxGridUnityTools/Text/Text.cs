@@ -31,7 +31,7 @@ namespace AxGrid.Text
 
         public static void Init(IEnumerable<string> languageCodes)
         {
-            Repository = new TextRepository(languageCodes);
+            Repository = TextRepository.FromResources(languageCodes);
             sf = Smart.CreateDefaultSmartFormat();
             sf.Settings.FormatErrorAction = ErrorAction.ThrowError;
         }
@@ -40,11 +40,9 @@ namespace AxGrid.Text
         {
             if (!format.StartsWith("app."))
                 return format;
-            try {
-                var test = Sf.Format("{" + format + "}", Repository.Translations);
-                if (test == "System.Collections.Generic.Dictionary`2[System.Object,System.Object]")
-                    throw new ArgumentException("Map found!");
-                return Sf.Format("{" + format + "}", Repository.Translations);
+            try
+            {
+                return $"{Repository.Get(format)}";
             }
             catch (Exception)
             {
@@ -66,7 +64,9 @@ namespace AxGrid.Text
 
             try
             {
-                return Sf.Format("{" + var + "}", Repository.Translations);
+                if (Repository.Translations.ContainsKey(var))
+                    return "{" + Repository.Get(var) + "}";
+                return var;
             }
             catch (Exception)
             {
