@@ -21,6 +21,7 @@ app:
     winnings: '{Winnings:tp(app.templates.balance)}'
     winningsCost: '{Winnings:tp(app.templates.cost)}'
   main:
+    demo: 'Можно получить, участвуя в турнире\n\""Алмазная лига\""'
     shop: 'Магазин'
     rank: 'Рейтинг'
     friends: 'Друзья'
@@ -87,6 +88,31 @@ app:
             var tr = new TextRepository(new[] {textRu, textEn});
             Assert.AreEqual(tr.Translations["app.main.shop"], "Магазин");
             Assert.AreEqual(tr.Get("app.main.shop"), "Магазин");
+        }
+        
+        [Test]
+        public void TestNewLineFormat()
+        {
+            var deserializer = new Deserializer();
+            var obj = (Dictionary<object, object>) deserializer.Deserialize(
+                new StringReader(textRu),
+                typeof(Dictionary<object, object>)
+            );
+
+            Console.WriteLine("SR:"+ Smart.Format("{app.main.demo}", obj));
+            
+            Console.WriteLine(textRu);
+            var tr = new TextRepository(new[] {textRu});
+            Console.WriteLine(tr.Get("app.main.demo"));
+        }
+
+        [Test]
+        public void GetArray()
+        {
+            
+            string t = "Zed2";
+            var array = TextUtils.TextToLong(t);
+            Console.WriteLine("{0} / {1} / {2} / {3}", array[0], array[1], array[2], array[3]);
         }
     }
 }

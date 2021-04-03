@@ -84,9 +84,13 @@
     <Compile Include="Text\TextRepository.cs" />
     <Compile Include="Tools\AxSprite.cs" />
     <Compile Include="Tools\AxSpriteCollection.cs" />
+    <Compile Include="Tools\AxSpriteObject.cs" />
+    <Compile Include="Tools\AxSpriteObjectCollection.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\DictionaryHelper.cs" />
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />
+    <Compile Include="Utils\HSLColor.cs" />
     <Compile Include="Utils\NullableDict.cs" />
     <Compile Include="Utils\NullableDictionary.cs" />
     <Compile Include="Utils\NullObject.cs" />

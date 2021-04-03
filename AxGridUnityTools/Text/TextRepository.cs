@@ -54,14 +54,17 @@ namespace AxGrid.Text {
                     {
                         return Resources.Load(file) as TextAsset;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
+                        Log.Error($"Language resource {file} not found ...");
                         return null;
                     }
                 })
                 .Where(item => item != null)
                 .Select(t => t.text)
                 .ToList();
+            
+            
             return new TextRepository(texts);
         }
         
