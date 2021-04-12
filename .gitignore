@@ -3,6 +3,7 @@
 */obj/*
 .dll
 .mdb
+.suo
 .idea/
 build/
 contrib/proto
