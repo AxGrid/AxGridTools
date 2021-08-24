@@ -474,6 +474,8 @@ namespace AxGrid.Model
                     if (attr.GetType() != typeof(Bind)) continue;
                     var e = (Bind) attr;
                     var eventName = e.EventName ?? methodInfo.Name ;
+                    if (eventName.Contains("{"))
+                        eventName = Smart.Format(eventName, obj);
                     var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
                     
                     if (_eventListeners.ContainsKey(eventName))
