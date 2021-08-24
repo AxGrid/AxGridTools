@@ -14,6 +14,17 @@ namespace AxGridToolsTest {
             model.Set("ulong", d);
             Assert.AreEqual(model.GetLong("ulong"), 15L);
         }
+        
+        public struct Person
+        {
+            public string Name;
+            public int Age;
+            public Person(string name, int age)
+            {
+                Name = name;
+                Age = age;
+            }
+        }
 
 
         [Test]

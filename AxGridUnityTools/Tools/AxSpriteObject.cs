@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AxGrid.Tools
 {
-    [CreateAssetMenu(fileName = "New Sprite Object", menuName = "AxSprite", order = 2)]
+    [CreateAssetMenu(fileName = "AxSprite", menuName = "Ax/AxSprite", order = 52)]
     public class AxSpriteObject : ScriptableObject
     {
         [SerializeField]
@@ -14,8 +14,8 @@ namespace AxGrid.Tools
         [SerializeField]
         private Sprite sprite;
 
-        public long SpriteId => spriteId;
-        public string SpriteName => spriteName;
+        public virtual long SpriteId => spriteId;
+        public virtual string SpriteName => spriteName;
         public Sprite Sprite => sprite;
 
     }

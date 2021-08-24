@@ -55,9 +55,7 @@ namespace AxGridToolsTest
             Assert.AreEqual(d1[States.First], 1);
             Assert.AreEqual(d1[States.Second], 2);
         }
-        
-        
-        
+
         [Test]
         public void CreateFlowAndExecute()
         {

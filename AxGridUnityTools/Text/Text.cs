@@ -49,6 +49,16 @@ namespace AxGrid.Text
                 return null;
             }
         }
+
+        public static string GetOrDefault(string format, string def, params object[] args)
+        {
+            if (Repository == null) Init(new []{"ru"});
+            if (string.IsNullOrEmpty(format)) return def;
+            var value = def;
+            if (Repository.Translations.ContainsKey(format)) 
+                value = Repository.Get(format);
+            return args.Length == 0 ? value : Smart.Format(value, args);
+        } 
         
         public static string Get(string format, params object[] args)
         {

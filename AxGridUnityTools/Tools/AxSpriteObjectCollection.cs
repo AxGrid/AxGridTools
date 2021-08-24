@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace AxGrid.Tools
 {
-    [CreateAssetMenu(fileName = "New Sprite Collection", menuName = "AxSprite", order = 3)]
+    [CreateAssetMenu(fileName = "AxSpriteCollection", menuName = "Ax/AxSprite Collection", order = 53)]
 
     public class AxSpriteObjectCollection : ScriptableObject
     {
-        [SerializeField]
-        private List<AxSpriteObject> spriteObjects = new List<AxSpriteObject>();
+        public List<AxSpriteObject> spriteObjects = new List<AxSpriteObject>();
 
         public Sprite getSprite(long spriteId, Sprite def = null)
         {

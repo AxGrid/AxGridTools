@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
+using log4net;
 using UnityEngine.Scripting;
 
 namespace AxGrid.Model
@@ -18,9 +19,9 @@ namespace AxGrid.Model
         public AsyncEventManager EventManager => aem;
 
 
-        private MLog _log;
+        private ILog _log;
 
-        protected MLog Log => _log ?? (_log = new MLog(GetType()));
+        protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType().Name));
 
 
         public void Refresh(string key)
@@ -39,6 +40,13 @@ namespace AxGrid.Model
         {
             aem.Dispose();
             dataObject.Clear();
+        }
+
+        public bool ToggleBool(string key, bool def)
+        {
+            var v = GetBool(key, def);
+            Set(key, !v);
+            return !v;
         }
  
         public string Toggle(string key, params string[] objects)

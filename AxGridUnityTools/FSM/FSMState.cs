@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AxGrid.Model;
+using log4net;
 using SmartFormat;
 using UnityEngine.Scripting;
 
@@ -19,8 +20,11 @@ namespace AxGrid.FSM
 
         private AsyncEventManager asm;
 
-        private MLog _log;        
-        protected MLog Log => _log ?? (_log = new MLog(GetType()));
+        protected ILog _log;        
+        private ILog Log
+        {
+            get { return _log ?? (_log = LogManager.GetLogger(GetType().Name)); }
+        }
 
         /// <summary>
         /// Proxy
@@ -44,10 +48,10 @@ namespace AxGrid.FSM
             public object Target { get; set; }
             public int Priority { get; set; }
             
-            protected MLog _log;        
-            private MLog Log
+            protected ILog _log;        
+            private ILog Log
             {
-                get { return _log ?? (_log = new MLog(GetType())); }
+                get { return _log ?? (_log = LogManager.GetLogger(GetType().Name)); }
             }
 
 
@@ -98,7 +102,7 @@ namespace AxGrid.FSM
             private float _currentTime = 0.0f;
             private float _resetTime = 0.0f;
             private float _startTime = 0.0f;
-            private static readonly ILog Log = new ILog();// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            private static readonly ILog Log = LogManager.GetLogger("TimingObject");// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
             public float Time
             {
                 get { return _resetTime; }

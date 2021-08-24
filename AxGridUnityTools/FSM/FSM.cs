@@ -35,7 +35,7 @@ namespace AxGrid.FSM
         }
         
         public string CurrentStateName { get; protected set; }
-        private static readonly ILog Log = new ILog();
+        //private static readonly ILog Log = new ILog();
 
         /// <summary>
         /// Содержит состояние

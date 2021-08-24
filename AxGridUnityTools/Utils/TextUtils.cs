@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using SmartFormat;
 
 namespace AxGrid.Utils
 {
@@ -39,6 +40,21 @@ namespace AxGrid.Utils
                 }
                 return sb.ToString();
             }
+        }
+
+        public static string GetTimeString(long seconds)
+        {
+            var s = TimeSpan.FromSeconds(seconds);
+            return GetTimeString(s);
+        }
+        
+        public static string GetTimeString(TimeSpan s)
+        {
+             
+             // if (s.TotalDays > 0)
+             //     return $"{(int)s.TotalDays}" +
+             //            Text.Text.GetOrDefault("app.format.days", "{0:day|days}", (int) s.TotalDays);
+             return s.ToString("HH:mm:ss");
         }
     }
 }
