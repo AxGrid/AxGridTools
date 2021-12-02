@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AxGrid.Model;
-using log4net;
 using SmartFormat;
 using UnityEngine.Scripting;
 
@@ -23,7 +22,7 @@ namespace AxGrid.FSM
         protected ILog _log;        
         private ILog Log
         {
-            get { return _log ?? (_log = LogManager.GetLogger(GetType().Name)); }
+            get { return Log; }
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace AxGrid.FSM
             protected ILog _log;        
             private ILog Log
             {
-                get { return _log ?? (_log = LogManager.GetLogger(GetType().Name)); }
+                get { return Log; }
             }
 
 
@@ -102,7 +101,7 @@ namespace AxGrid.FSM
             private float _currentTime = 0.0f;
             private float _resetTime = 0.0f;
             private float _startTime = 0.0f;
-            private static readonly ILog Log = LogManager.GetLogger("TimingObject");// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            private static readonly ILog Log = Log; // = LogManager.GetLogger("TimingObject");// LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
             public float Time
             {
                 get { return _resetTime; }

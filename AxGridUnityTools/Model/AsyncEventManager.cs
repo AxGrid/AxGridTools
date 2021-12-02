@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using log4net;
 using SmartFormat;
 
 
@@ -22,8 +21,8 @@ namespace AxGrid.Model
     /// </summary>
     public class AsyncEventManager : IDisposable
     {
-        
-        private static readonly ILog Log = LogManager.GetLogger("AsyncEventManager");
+
+        private static readonly ILog Log = Log; //LogManager.GetLogger("AsyncEventManager");
         
         /// <summary>
         /// Класс хранения объекта и метода

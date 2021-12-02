@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -226,11 +225,12 @@ namespace AxGrid.Model {
         /// <returns></returns>
         public static Options LoadPrefs(string name = "opts") {
             var str = PlayerPrefs.GetString(name);
-            return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
+            
+            return !string.IsNullOrEmpty(str) ? new Options(LitJson.JsonMapper.ToObject<Dictionary<string, object>>(str)) : new Options();
         }
         
         public static Options LoadFromString(string str) {
-            return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
+            return !string.IsNullOrEmpty(str) ? new Options(LitJson.JsonMapper.ToObject<Dictionary<string, object>>(str)) : new Options();
         }
 
         /// <summary>
@@ -239,13 +239,13 @@ namespace AxGrid.Model {
         /// <param name="name"></param>
         /// <param name="save"></param>
         public void SavePrefs(string name = "opts", bool allKeys = false, bool save = true) {
-            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
+            var json = allKeys ? LitJson.JsonMapper.ToJson(dataObject) : LitJson.JsonMapper.ToJson(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
             PlayerPrefs.SetString(name, json);
             if (save) PlayerPrefs.Save();
         }
 
         public string SaveAsString(bool allKeys = false) {
-            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
+            var json = allKeys ? LitJson.JsonMapper.ToJson(dataObject) : LitJson.JsonMapper.ToJson(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
             return json;
         } 
     }

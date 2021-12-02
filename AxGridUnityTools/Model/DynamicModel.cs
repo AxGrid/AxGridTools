@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
-using log4net;
 using UnityEngine.Scripting;
 
 namespace AxGrid.Model
@@ -19,9 +18,8 @@ namespace AxGrid.Model
         public AsyncEventManager EventManager => aem;
 
 
-        private ILog _log;
 
-        protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType().Name));
+        protected ILog Log => Log;
 
 
         public void Refresh(string key)
