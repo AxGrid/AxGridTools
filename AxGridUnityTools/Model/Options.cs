@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Scripting;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace AxGrid.Model {
     
@@ -219,18 +220,29 @@ namespace AxGrid.Model {
             return GetEnumerator();
         }
 
+        
+        static Serializer _serializer = new SerializerBuilder()
+            .WithNamingConvention(new CamelCaseNamingConvention())
+            .Build();
+
+        private static Deserializer _deserializer = new DeserializerBuilder()
+            .WithNamingConvention(new CamelCaseNamingConvention())
+            .Build();
+        
         /// <summary>
         /// Сохранить в Unity3d PlayerPrefs
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Options LoadPrefs(string name = "opts") {
+        public static Options LoadPrefs(string name = "yopts") {
             var str = PlayerPrefs.GetString(name);
-            return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
+            return LoadFromString(str);
         }
         
         public static Options LoadFromString(string str) {
-            return !string.IsNullOrEmpty(str) ? new Options(JsonConvert.DeserializeObject<Dictionary<string, object>>(str)) : new Options();
+            if (string.IsNullOrEmpty(str))
+                return new Options();
+            return new Options(_deserializer.Deserialize<Dictionary<string, object>>(str));
         }
 
         /// <summary>
@@ -238,15 +250,18 @@ namespace AxGrid.Model {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="save"></param>
-        public void SavePrefs(string name = "opts", bool allKeys = false, bool save = true) {
-            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
-            PlayerPrefs.SetString(name, json);
+        public void SavePrefs(string name = "yopts", bool allKeys = false, bool save = true) {
+            var s = SaveAsString(allKeys);
+            PlayerPrefs.SetString(name, s);
             if (save) PlayerPrefs.Save();
         }
 
-        public string SaveAsString(bool allKeys = false) {
-            var json = allKeys ? JsonConvert.SerializeObject(dataObject) : JsonConvert.SerializeObject(dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i=>i.Value));
-            return json;
+        public string SaveAsString(bool allKeys = false)
+        {
+            var d = allKeys
+                ? dataObject
+                : dataObject.Where(i => SaveKeys.Contains(i.Key)).ToDictionary(i => i.Key, i => i.Value);
+            return _serializer.Serialize(d);
         } 
     }
 }
