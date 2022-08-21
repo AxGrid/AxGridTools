@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using AxGrid.Model;
 using AxGrid.Path;
 using AxGrid.Utils;
@@ -51,7 +52,7 @@ namespace AxGrid.Base
 					Exception th = e;
 					while (th.InnerException != null)
 						th = th.InnerException;
-					Debug.LogError($"{th.Message}\nin {Method.Name} target {GetTargetName()}\n{th.StackTrace}");
+					Debug.LogError($"{Regex.Escape(th.Message)}\nin {Method.Name} target {GetTargetName()}\n{Regex.Escape(th.StackTrace)}");
 				}
 			}
 
@@ -273,6 +274,8 @@ namespace AxGrid.Base
 		{
 			refreshList.ForEach(r => r.Reset());
 		}
+
+
 		
 		protected void FindAttrebutes()
 		{
@@ -291,7 +294,8 @@ namespace AxGrid.Base
 				disposeMethodInfo = GetType().GetMethod("Dispose");
 
 			
-			foreach (MethodInfo _mi in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			//foreach (MethodInfo _mi in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			foreach (MethodInfo _mi in MethodUtils.GetAllMethodsInfo(GetType()))
 			{
 				var mi = _mi;
 				foreach (object _o in mi.GetCustomAttributes(false))

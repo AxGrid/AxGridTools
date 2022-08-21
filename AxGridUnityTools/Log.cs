@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using log4net;
 
 namespace AxGrid
@@ -10,25 +11,25 @@ namespace AxGrid
         public static void Debug(string message)
         {
             if (logger.IsDebugEnabled)
-                logger.Debug(message);
+                logger.Debug(Regex.Escape(message));
         }
         
         public static void Info(string message)
         {
             if (logger.IsInfoEnabled)
-                logger.Info(message);
+                logger.Info(Regex.Escape(message));
         }
         
         public static void Warn(string message)
         {
             if (logger.IsWarnEnabled)
-                logger.Warn(message);
+                logger.Warn(Regex.Escape(message));
         }
         
         public static void Error(string message)
         {
             if (logger.IsErrorEnabled)
-                logger.Error(message);
+                logger.Error(Regex.Escape(message));
         }
         
         public static void Error(Exception ex)
@@ -40,7 +41,7 @@ namespace AxGrid
         public static void Error(Exception ex, string message)
         {
             if (logger.IsErrorEnabled)
-                logger.Error($"{message}: {ex.Message}\n{ex.StackTrace}");
+                logger.Error(Regex.Escape($"{message}: {ex.Message}\n{ex.StackTrace}"));
         }
     }
 }

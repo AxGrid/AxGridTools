@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AxGrid.Utils;
 using log4net;
 using SmartFormat;
 
@@ -160,7 +161,7 @@ namespace AxGrid.Model
         /// <param name="obj">Объект</param>
         public void Add(object obj)
         {
-            foreach (var methodInfo in obj.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var methodInfo in MethodUtils.GetAllMethodsInfo(obj.GetType()))
             {
                 foreach(var attr in methodInfo.GetCustomAttributes(typeof(Bind), true))
                 {
@@ -168,7 +169,7 @@ namespace AxGrid.Model
                     var e = (Bind) attr;
                     var mio = new MethodInfoObject {Target = obj, Method = methodInfo };
                     Add(e, mio);
-                    // var eventName = e.EventName ?? methodInfo.Name;
+                    //var eventName = e.EventName ?? methodInfo.Name;
                     // if (eventName.Contains("{"))
                     //     eventName = Smart.Format(eventName, obj);
                     //
@@ -191,7 +192,7 @@ namespace AxGrid.Model
             var eventName = !string.IsNullOrEmpty(realEventName) ? realEventName : bind.EventName ?? mio.Method.Name;
             if (eventName.Contains("{"))
                 eventName = Smart.Format(eventName, mio.Target);
-            
+
             if (!_eventListeners.ContainsKey(eventName))
                 _eventListeners.Add(eventName, new List<MethodInfoObject>());
             if (!_eventListeners[eventName].Contains(mio))

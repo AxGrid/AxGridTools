@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AxGrid.Base;
 using AxGrid.Model;
+using AxGrid.Utils;
 using log4net;
 using SmartFormat;
 using UnityEngine.Scripting;
@@ -162,6 +164,16 @@ namespace AxGrid.FSM
                 };
             }
             
+            public static TimingObject fromMonoBehaviourAttribute(OnRefresh attr) {
+                return new TimingObject(attr.Interval, attr.currentInterval, true);
+            }
+
+            public static TimingObject fromMonoBehaviourAttribute(OnDelay attr)
+            {
+                return new TimingObject(attr.interval, attr.currentInterval, false);
+            }
+
+            
             public TimingObject(float resetTime, float currentTime, bool loop)
             {
            
@@ -191,8 +203,7 @@ namespace AxGrid.FSM
             updates = new List<MethodInfoObject>();
             timersDictionary = new Dictionary<string, TimingObject>();
             
-            foreach (var methodInfo in GetType()
-                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var methodInfo in MethodUtils.GetAllMethodsInfo(GetType()))
             {
                 foreach (var o in methodInfo.GetCustomAttributes(false))
                 {
@@ -220,10 +231,32 @@ namespace AxGrid.FSM
                             loop.Target = this;
                             timersDictionary.Add(loop.Name ?? methodInfo.Name, loop);
                         }
-                        break;
+                        //break; //TODO: Чет это странный break
                     }else if (o.GetType() == typeof(One))
                     {
                         var one = TimingObject.fromAttribute((One) o);
+                        timersDictionary.Add(one.Name ?? methodInfo.Name, one);
+                        one.Method = methodInfo;
+                        one.Target = this;
+                    }else if (o.GetType() == typeof(OnRefresh))
+                    {
+                        var loop = TimingObject.fromMonoBehaviourAttribute((OnRefresh) o);
+                        if (loop.Time == 0)
+                            updates.Add(new MethodInfoObject
+                            {
+                                Method = methodInfo,
+                                Target = this,
+                                Priority = loop.Priority
+                            });
+                        else
+                        {
+                            loop.Method = methodInfo;
+                            loop.Target = this;
+                            timersDictionary.Add(loop.Name ?? methodInfo.Name, loop);
+                        }
+                    }else if (o.GetType() == typeof(OnDelay))
+                    {
+                        var one = TimingObject.fromMonoBehaviourAttribute((OnDelay) o);
                         timersDictionary.Add(one.Name ?? methodInfo.Name, one);
                         one.Method = methodInfo;
                         one.Target = this;

@@ -94,6 +94,7 @@
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />
     <Compile Include="Utils\HSLColor.cs" />
+    <Compile Include="Utils\MethodUtils.cs" />
     <Compile Include="Utils\NullableDict.cs" />
     <Compile Include="Utils\NullableDictionary.cs" />
     <Compile Include="Utils\NullObject.cs" />
