@@ -161,7 +161,7 @@ namespace AxGrid.Model
         /// <param name="obj">Объект</param>
         public void Add(object obj)
         {
-            foreach (var methodInfo in MethodUtils.GetAllMethodsInfo(obj.GetType()))
+            foreach (var methodInfo in ReflectionUtils.GetAllMethodsInfo(obj.GetType()))
             {
                 foreach(var attr in methodInfo.GetCustomAttributes(typeof(Bind), true))
                 {
@@ -190,8 +190,8 @@ namespace AxGrid.Model
                 return;
             }
             var eventName = !string.IsNullOrEmpty(realEventName) ? realEventName : bind.EventName ?? mio.Method.Name;
-            if (eventName.Contains("{"))
-                eventName = Smart.Format(eventName, mio.Target);
+            if (eventName.Contains("{") && mio.Target != null)
+                eventName = Smart.Format(eventName, ReflectionUtils.GetAllFieldValues(mio.Target.GetType(), mio.Target));
 
             if (!_eventListeners.ContainsKey(eventName))
                 _eventListeners.Add(eventName, new List<MethodInfoObject>());

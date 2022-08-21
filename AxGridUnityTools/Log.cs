@@ -11,25 +11,25 @@ namespace AxGrid
         public static void Debug(string message)
         {
             if (logger.IsDebugEnabled)
-                logger.Debug(Regex.Escape(message));
+                logger.Debug(message);
         }
         
         public static void Info(string message)
         {
             if (logger.IsInfoEnabled)
-                logger.Info(Regex.Escape(message));
+                logger.Info(message);
         }
         
         public static void Warn(string message)
         {
             if (logger.IsWarnEnabled)
-                logger.Warn(Regex.Escape(message));
+                logger.Warn(message);
         }
         
         public static void Error(string message)
         {
             if (logger.IsErrorEnabled)
-                logger.Error(Regex.Escape(message));
+                logger.Error(message);
         }
         
         public static void Error(Exception ex)
@@ -41,7 +41,7 @@ namespace AxGrid
         public static void Error(Exception ex, string message)
         {
             if (logger.IsErrorEnabled)
-                logger.Error(Regex.Escape($"{message}: {ex.Message}\n{ex.StackTrace}"));
+                logger.Error($"{message}: {ex.Message}\n{ex.StackTrace}");
         }
     }
 }

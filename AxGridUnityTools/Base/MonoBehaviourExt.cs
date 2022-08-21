@@ -295,7 +295,7 @@ namespace AxGrid.Base
 
 			
 			//foreach (MethodInfo _mi in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-			foreach (MethodInfo _mi in MethodUtils.GetAllMethodsInfo(GetType()))
+			foreach (MethodInfo _mi in ReflectionUtils.GetAllMethodsInfo(GetType()))
 			{
 				var mi = _mi;
 				foreach (object _o in mi.GetCustomAttributes(false))

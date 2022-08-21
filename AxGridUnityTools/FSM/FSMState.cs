@@ -203,7 +203,7 @@ namespace AxGrid.FSM
             updates = new List<MethodInfoObject>();
             timersDictionary = new Dictionary<string, TimingObject>();
             
-            foreach (var methodInfo in MethodUtils.GetAllMethodsInfo(GetType()))
+            foreach (var methodInfo in ReflectionUtils.GetAllMethodsInfo(GetType()))
             {
                 foreach (var o in methodInfo.GetCustomAttributes(false))
                 {
