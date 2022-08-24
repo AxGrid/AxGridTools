@@ -92,6 +92,7 @@
     <Compile Include="Tools\AxSpriteObjectCollectionSimple.cs" />
     <Compile Include="Tools\OKeySprite.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\ConvertUtils.cs" />
     <Compile Include="Utils\DictionaryHelper.cs" />
     <Compile Include="Utils\Easing.cs" />
     <Compile Include="Utils\EasingTo.cs" />

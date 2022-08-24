@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SmartFormat;
 using System.Linq;
+using AxGrid.Utils;
 using log4net;
 using UnityEngine.Scripting;
 
@@ -233,6 +234,63 @@ namespace AxGrid.Model
             return Convert.ToInt32(dataObject[name]);
         }
 
+        public int[] GetArrayOfInt(string name, int[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToInt(dataObject[name]);
+        } 
+
+        public uint[] GetArrayOfUInt(string name, uint[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToUInt(dataObject[name]);
+        } 
+
+        public long[] GetArrayOfInt(string name, long[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToLong(dataObject[name]);
+        } 
+
+        public ulong[] GetArrayOfUInt(string name, ulong[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToULong(dataObject[name]);
+        } 
+        
+        public string[] GetArrayOfString(string name, string[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToString(dataObject[name]);
+        } 
+        
+        public bool[] GetArrayOfBool(string name, bool[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToBool(dataObject[name]);
+        } 
+        
+        public float[] GetArrayOfFloat(string name, float[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToFloat(dataObject[name]);
+        } 
+        
+        public double[] GetArrayOfDouble(string name, double[] def = default)
+        {
+            if (!dataObject.ContainsKey(name) || dataObject[name] == null)
+                return def;
+            return ConvertUtils.ConvertToDouble(dataObject[name]);
+        } 
+
+        
         
         public bool GetBool(string name, bool def = default(bool))
         {
