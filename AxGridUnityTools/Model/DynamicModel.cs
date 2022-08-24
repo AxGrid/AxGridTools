@@ -376,6 +376,8 @@ namespace AxGrid.Model
         public DynamicModel(): this( new Dictionary<string, object>()) {}
         public DynamicModel(Dictionary<string, object> construct)
         {
+            if (construct == null)
+                construct = new Dictionary<string, object>();
             dataObject = construct;
             aem = new AsyncEventManager();
             aem.Add(this);

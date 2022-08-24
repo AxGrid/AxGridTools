@@ -264,7 +264,7 @@ namespace AxGrid.Model
             Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
         }
         
-        public void AddAction(string eventName ,Action method)
+        public void AddAction(string eventName, Action method)
         {
             Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
         }
@@ -283,6 +283,8 @@ namespace AxGrid.Model
             Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
         }
 
+        
+        
         
         /// <summary>
         /// Добавить кастомный метод
@@ -372,6 +374,94 @@ namespace AxGrid.Model
             Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
         }
         
+                /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<T>(DEventMethod<T> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+
+        public void AddParameterAction<T>(string eventName, DEventMethod<T> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+        
+        /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<A,B>(DEventMethod<A,B> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void AddParameterAction<A,B>(string eventName, DEventMethod<A,B> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
+        /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<A,B,C>(DEventMethod<A,B,C> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void AddParameterAction<A,B,C>(string eventName, DEventMethod<A,B,C> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+        /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<A,B,C,D>(DEventMethod<A,B,C,D> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+
+        public void AddParameterAction<A,B,C,D>(string eventName, DEventMethod<A,B,C,D> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+
+        /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<A,B,C,D,E>(DEventMethod<A,B,C,D,E> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void AddParameterAction<A,B,C,D,E>(string eventName, DEventMethod<A,B,C,D,E> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+        
+        /// <summary>
+        /// Добавить кастомный метод
+        /// </summary>
+        /// <param name="method">Слушатель</param>
+        public void AddParameterAction<A,B,C,D,E,F>(DEventMethod<A,B,C,D,E,F> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        
+        public void AddParameterAction<A,B,C,D,E,F>(string eventName, DEventMethod<A,B,C,D,E,F> method)
+        {
+            Add(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
         #endregion
         
         #region RemoveAction
@@ -455,6 +545,69 @@ namespace AxGrid.Model
         }
         
         public void RemoveAction<A,B,C,D,E,F>(string eventName, DEventMethod<A,B,C,D,E,F> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
+                public void RemoveParameterAction<T>(DEventMethod<T> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void RemoveParameterAction<T>(string eventName, DEventMethod<T> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
+        
+        public void RemoveParameterAction<A,B>(DEventMethod<A,B> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+
+        
+        public void RemoveParameterAction<A,B>(string eventName, DEventMethod<A,B> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
+        public void RemoveParameterAction<A,B,C>(DEventMethod<A,B,C> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void RemoveParameterAction<A,B,C>(string eventName, DEventMethod<A,B,C> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+        public void RemoveParameterAction<A,B,C,D>(DEventMethod<A,B,C,D> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+
+        public void RemoveParameterAction<A,B,C,D>(string eventName, DEventMethod<A,B,C,D> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+
+        
+        public void RemoveParameterAction<A,B,C,D,E>(DEventMethod<A,B,C,D,E> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void RemoveParameterAction<A,B,C,D,E>(string eventName, DEventMethod<A,B,C,D,E> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
+        }
+        
+        public void RemoveParameterAction<A,B,C,D,E,F>(DEventMethod<A,B,C,D,E,F> method)
+        {
+            Remove(new MethodInfoObject {Target = method.Target, Method = method.Method});
+        }
+        
+        public void RemoveParameterAction<A,B,C,D,E,F>(string eventName, DEventMethod<A,B,C,D,E,F> method)
         {
             Remove(new MethodInfoObject {Target = method.Target, Method = method.Method}, eventName);
         }
