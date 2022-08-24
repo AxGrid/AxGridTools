@@ -52,7 +52,7 @@ namespace AxGrid.Base
 					Exception th = e;
 					while (th.InnerException != null)
 						th = th.InnerException;
-					Debug.LogError($"{Regex.Escape(th.Message)}\nin {Method.Name} target {GetTargetName()}\n{Regex.Escape(th.StackTrace)}");
+					Debug.LogError($"{th.Message}\nin {Method.Name} target {GetTargetName()}\n{th.StackTrace}");
 				}
 			}
 

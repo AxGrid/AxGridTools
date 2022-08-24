@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace AxGrid.Model
 {
-    public class DynamicList<T> : List<T>, IDynamicList
+    public class DynamicList<T> : List<T>, IDynamicObject
     {
         public DynamicModel ModelLink { get; set; }
         public string ModelField { get; set; }
@@ -21,9 +21,4 @@ namespace AxGrid.Model
         }
     }
 
-    public interface IDynamicList
-    {
-        DynamicModel ModelLink { get; set; }
-        string ModelField { get; set; }
-    }
 }

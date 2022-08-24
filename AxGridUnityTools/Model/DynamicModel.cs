@@ -151,10 +151,10 @@ namespace AxGrid.Model
                 if (dataObject[name] != obj)
                 {
                     var before = dataObject[name];
-                    if (obj is IDynamicList list)
+                    if (obj is IDynamicObject dObj)
                     {
-                        list.ModelLink = this;
-                        list.ModelField = name;
+                        dObj.ModelLink = this;
+                        dObj.ModelField = name;
                     }
                     dataObject[name] = obj;
                     SendEvents(name, obj, before);
@@ -162,10 +162,11 @@ namespace AxGrid.Model
             }
             else
             {
-                if (obj is IDynamicList list)
+               
+                if (obj is IDynamicObject dObj)
                 {
-                    list.ModelLink = this;
-                    list.ModelField = name;
+                    dObj.ModelLink = this;
+                    dObj.ModelField = name;
                 }
                 dataObject.Add(name, obj);
                 SendEvents(name, obj, null);
@@ -183,12 +184,22 @@ namespace AxGrid.Model
                 if (dataObject[name] != obj)
                 {
                     var before = dataObject[name]; 
+                    if (obj is IDynamicObject dObj)
+                    {
+                        dObj.ModelLink = this;
+                        dObj.ModelField = name;
+                    }
                     dataObject[name] = obj;
                     SendEventsAsync(name, obj, before);
                 }
             }
             else
             {
+                if (obj is IDynamicObject dObj)
+                {
+                    dObj.ModelLink = this;
+                    dObj.ModelField = name;
+                }
                 dataObject.Add(name, obj);
                 SendEventsAsync(name, obj, null);
             }

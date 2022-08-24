@@ -72,6 +72,8 @@
     <Compile Include="Model\AsyncExecutor.cs" />
     <Compile Include="Model\DynamicList.cs" />
     <Compile Include="Model\DynamicModel.cs" />
+    <Compile Include="Model\IDynamicDictionary.cs" />
+    <Compile Include="Model\IDynamicObject.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\SimpleModel.cs" />
     <Compile Include="Path\CPath.cs" />
