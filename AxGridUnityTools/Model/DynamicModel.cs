@@ -248,14 +248,14 @@ namespace AxGrid.Model
             return ConvertUtils.ConvertToUInt(dataObject[name]);
         } 
 
-        public long[] GetArrayOfInt(string name, long[] def = default)
+        public long[] GetArrayOfLong(string name, long[] def = default)
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
                 return def;
             return ConvertUtils.ConvertToLong(dataObject[name]);
         } 
 
-        public ulong[] GetArrayOfUInt(string name, ulong[] def = default)
+        public ulong[] GetArrayOfULong(string name, ulong[] def = default)
         {
             if (!dataObject.ContainsKey(name) || dataObject[name] == null)
                 return def;
