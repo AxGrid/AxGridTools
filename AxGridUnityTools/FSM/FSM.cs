@@ -12,6 +12,8 @@ namespace AxGrid.FSM
         public static bool ShowFsmEnterState { get; set; }
         public static bool ShowFsmExitState { get; set; }
         
+        public string Name { get; set; }
+        
         private readonly Dictionary<string, IState> _states = new Dictionary<string, IState>();
         private IState currentState;
         
@@ -127,15 +129,17 @@ namespace AxGrid.FSM
         /// </summary>
         /// <param name="name">имя состояния для перехода</param>
         /// <param name="direct">не обращать внимание на перекрытые переходы</param>
-        public void Change(string name, bool direct = false) {
+        public void Change(string name, bool direct = false)
+        {
             if (!direct) name = GetOverrideExit(CurrentStateName, name);
-            if (ShowFsmExitState) Log.Debug($"--- EXIT {CurrentStateName} ---");
+            if (ShowFsmExitState) Log.Debug($"--- EXIT {Name}.{CurrentStateName} ---");
             currentState?.__ExitState();
             if (!_states.ContainsKey(name))
                 throw new Exception($"Key {name} not found!");
             currentState = _states[name];
             CurrentStateName = name;
-            if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
+            
+            if (ShowFsmEnterState) Log.Debug($"--- ENTER {Name}.{CurrentStateName} ---");
             currentState.__EnterState(); 
         }
         
