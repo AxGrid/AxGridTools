@@ -64,7 +64,7 @@ namespace AxGrid.FSM
                     found = true;
                 }
                 if (!found)
-                    Log.Error($"FSMState {state.GetType().Name} doesn't have attribute State");
+                    Log.Error($"FSMState {Name}.{state.GetType().Name} doesn't have attribute State");
             }
         }
         
@@ -83,7 +83,7 @@ namespace AxGrid.FSM
                     found = true;
                 }
                 if (!found)
-                    Log.Error($"FSMState {state.GetType().Name} doesn't have attribute State");
+                    Log.Error($"FSMState {Name}.{state.GetType().Name} doesn't have attribute State");
             }
         }
 
@@ -96,7 +96,7 @@ namespace AxGrid.FSM
         {
             if (_states.ContainsKey(stateName))
             {
-                Log.Warn($"Dublicate state with name {stateName}. Use method Replace");
+                Log.Warn($"Duplicate state with name {stateName} in fsm {Name}. Use method Replace");
                 _states.Remove(stateName);
             }
             state.Parent = this;
@@ -135,7 +135,7 @@ namespace AxGrid.FSM
             if (ShowFsmExitState) Log.Debug($"--- EXIT {Name}.{CurrentStateName} ---");
             currentState?.__ExitState();
             if (!_states.ContainsKey(name))
-                throw new Exception($"Key {name} not found!");
+                throw new Exception($"Key {name} not found in fsm {Name}!");
             currentState = _states[name];
             CurrentStateName = name;
             
@@ -148,13 +148,13 @@ namespace AxGrid.FSM
         /// </summary>
         public void ReEnter() {
             var name = this.CurrentStateName;
-            if (ShowFsmExitState) Log.Debug($"--- EXIT {CurrentStateName} ---");
+            if (ShowFsmExitState) Log.Debug($"--- EXIT {Name}.{CurrentStateName} ---");
             currentState?.__ExitState();
             if (!_states.ContainsKey(name))
-                throw new Exception($"Key {name} not found!");
+                throw new Exception($"Key {name} not found in fsm {Name}!");
             currentState = _states[name];
             CurrentStateName = name;
-            if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
+            if (ShowFsmEnterState) Log.Debug($"--- ENTER {Name}.{CurrentStateName} ---");
             currentState.__EnterState(); 
         }
 
