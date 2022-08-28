@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AxGrid.Utils;
+using log4net;
 
 namespace AxGrid.FSM
 {
@@ -11,14 +12,26 @@ namespace AxGrid.FSM
     {
         public static bool ShowFsmEnterState { get; set; }
         public static bool ShowFsmExitState { get; set; }
-        
-        public string Name { get; set; }
+
+
+        private string name = "";
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                Log = LogManager.GetLogger($"FSM.{name}");
+            }
+        }
         
         private readonly Dictionary<string, IState> _states = new Dictionary<string, IState>();
         private IState currentState;
         
         private Dictionary<string, Dictionary<string,string>> ExitActions = new Dictionary<string, Dictionary<string, string>>();
 
+        public ILog Log { get; private set;  } = LogManager.GetLogger("FSM");
         
         public void OverrideExit(string state, string exit, string newExit) {
             if (!ExitActions.ContainsKey(state))
@@ -64,7 +77,7 @@ namespace AxGrid.FSM
                     found = true;
                 }
                 if (!found)
-                    Log.Error($"FSMState {Name}.{state.GetType().Name} doesn't have attribute State");
+                    Log.Error($"FSMState {Name} doesn't have attribute State");
             }
         }
         
@@ -83,7 +96,7 @@ namespace AxGrid.FSM
                     found = true;
                 }
                 if (!found)
-                    Log.Error($"FSMState {Name}.{state.GetType().Name} doesn't have attribute State");
+                    Log.Error($"FSMState {Name} doesn't have attribute State");
             }
         }
 
@@ -96,7 +109,7 @@ namespace AxGrid.FSM
         {
             if (_states.ContainsKey(stateName))
             {
-                Log.Warn($"Duplicate state with name {stateName} in fsm {Name}. Use method Replace");
+                Log.Warn($"Duplicate state with name {stateName}. Use method Replace");
                 _states.Remove(stateName);
             }
             state.Parent = this;
@@ -132,14 +145,14 @@ namespace AxGrid.FSM
         public void Change(string name, bool direct = false)
         {
             if (!direct) name = GetOverrideExit(CurrentStateName, name);
-            if (ShowFsmExitState) Log.Debug($"--- EXIT {Name}.{CurrentStateName} ---");
+            if (ShowFsmExitState) Log.Debug($"--- EXIT {CurrentStateName} ---");
             currentState?.__ExitState();
             if (!_states.ContainsKey(name))
                 throw new Exception($"Key {name} not found in fsm {Name}!");
             currentState = _states[name];
             CurrentStateName = name;
             
-            if (ShowFsmEnterState) Log.Debug($"--- ENTER {Name}.{CurrentStateName} ---");
+            if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
             currentState.__EnterState(); 
         }
         
@@ -148,13 +161,13 @@ namespace AxGrid.FSM
         /// </summary>
         public void ReEnter() {
             var name = this.CurrentStateName;
-            if (ShowFsmExitState) Log.Debug($"--- EXIT {Name}.{CurrentStateName} ---");
+            if (ShowFsmExitState) Log.Debug($"--- EXIT {CurrentStateName} ---");
             currentState?.__ExitState();
             if (!_states.ContainsKey(name))
-                throw new Exception($"Key {name} not found in fsm {Name}!");
+                throw new Exception($"Key {name} not found!");
             currentState = _states[name];
             CurrentStateName = name;
-            if (ShowFsmEnterState) Log.Debug($"--- ENTER {Name}.{CurrentStateName} ---");
+            if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
             currentState.__EnterState(); 
         }
 
