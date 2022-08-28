@@ -52,6 +52,11 @@ namespace AxGrid.FSM
         public string CurrentStateName { get; protected set; }
         //private static readonly ILog Log = new ILog();
 
+        public string PreviousStateName =>
+            PreviousStateNames.Count > 0 ? PreviousStateNames[PreviousStateNames.Count - 1] : "";
+
+        public readonly List<string> PreviousStateNames = new List<string>();
+        
         /// <summary>
         /// Содержит состояние
         /// </summary>
@@ -150,8 +155,10 @@ namespace AxGrid.FSM
             if (!_states.ContainsKey(name))
                 throw new Exception($"Key {name} not found in fsm {Name}!");
             currentState = _states[name];
+            PreviousStateNames.Add(CurrentStateName);
+            while (PreviousStateNames.Count > 20)
+                PreviousStateNames.RemoveAt(0);
             CurrentStateName = name;
-            
             if (ShowFsmEnterState) Log.Debug($"--- ENTER {CurrentStateName} ---");
             currentState.__EnterState(); 
         }

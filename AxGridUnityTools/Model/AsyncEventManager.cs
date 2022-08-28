@@ -26,6 +26,8 @@ namespace AxGrid.Model
         
         private static readonly ILog Log = LogManager.GetLogger("AsyncEventManager");
         
+        
+        
         /// <summary>
         /// Класс хранения объекта и метода
         /// </summary>
@@ -192,7 +194,7 @@ namespace AxGrid.Model
             var eventName = !string.IsNullOrEmpty(realEventName) ? realEventName : bind.EventName ?? mio.Method.Name;
             if (eventName.Contains("{") && mio.Target != null)
                 eventName = Smart.Format(eventName, ReflectionUtils.GetAllFieldValues(mio.Target.GetType(), mio.Target));
-
+            Log.Debug($"Add event {eventName} for {mio.Target?.GetType().Name}");
             if (!_eventListeners.ContainsKey(eventName))
                 _eventListeners.Add(eventName, new List<MethodInfoObject>());
             if (!_eventListeners[eventName].Contains(mio))
@@ -202,7 +204,6 @@ namespace AxGrid.Model
         private void Add(MethodInfoObject mio, string newEventName = "")
         {
             string eventName = newEventName != "" ? newEventName : mio.Method.Name;
-            
             if (mio.Method.GetCustomAttributes(typeof(Bind), true).Length > 0)
             {
                 foreach (var attr in mio.Method.GetCustomAttributes(typeof(Bind), true))
