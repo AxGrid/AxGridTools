@@ -14,6 +14,8 @@ namespace AxGrid.SmartFormat
         {
             var iCanHandleThisInput = formattingInfo.CurrentValue is int || 
                                       formattingInfo.CurrentValue is long || 
+                                      formattingInfo.CurrentValue is ulong ||
+                                      formattingInfo.CurrentValue is uint ||
                                       formattingInfo.CurrentValue is double ||
                                       formattingInfo.CurrentValue is float;
             if (!iCanHandleThisInput)
