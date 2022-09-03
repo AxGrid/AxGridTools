@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AxGrid.Utils;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
@@ -130,6 +131,56 @@ namespace AxGridToolsTest
             Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
             Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "World2");
             Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 15);
+        }
+
+
+        [Test]
+        public void TestStateEventsStrings()
+        {
+            var e1 = "A.SubObject[0].B";
+            var ev = ReflectionUtils.GetEvents(e1);
+            
+            Assert.AreEqual(ev.Count, 4);
+            Assert.AreEqual(ev[0], "A");
+            Assert.AreEqual(ev[1], "A.SubObject");
+            Assert.AreEqual(ev[2], "A.SubObject[0]");
+            Assert.AreEqual(ev[3], "A.SubObject[0].B");
+            
+            e1 = "A[0]";
+            ev = ReflectionUtils.GetEvents(e1);
+            
+            
+            Assert.AreEqual(ev.Count, 2);
+            Assert.AreEqual(ev[0], "A");
+            Assert.AreEqual(ev[1], "A[0]");
+            
+            e1 = "A";
+            ev = ReflectionUtils.GetEvents(e1);
+            
+            Assert.AreEqual(ev.Count, 1);
+            Assert.AreEqual(ev[0], "A");
+
+        }
+
+        [Test]
+        public void TestEventsStringsClear()
+        {
+            var eventList = new List<string>
+            {
+                "A.SubObject",
+                "A.Count",
+                "A.Count.C",
+                "A.Elements.Internal[0].B",
+                "A.SubObject[0]",
+                "A.SubObject[0].B",
+            };
+            
+            var res = ReflectionUtils.ClearEvents(eventList);
+            Assert.AreEqual(res.Count, 3);
+            Assert.AreEqual(res[0], "A.Count");
+            Assert.AreEqual(res[1], "A.SubObject");
+            Assert.AreEqual(res[2], "A.Elements.Internal[0].B");
+            
         }
     }
 

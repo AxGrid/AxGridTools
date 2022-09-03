@@ -95,6 +95,7 @@
     <Compile Include="State\MonoBehaviourExtState.cs" />
     <Compile Include="State\SettingsEventManager.cs" />
     <Compile Include="State\SmartState.cs" />
+    <Compile Include="State\StateEventManager.cs" />
     <Compile Include="Text\Codes.cs" />
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />

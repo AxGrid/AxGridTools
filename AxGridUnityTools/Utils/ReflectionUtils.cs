@@ -10,6 +10,8 @@ namespace AxGrid.Utils
 {
     public static class ReflectionUtils
     {
+        static Regex rx = new Regex(@"^(?<property>\w+)(\[(?<index>\w+)\])?$", RegexOptions.Compiled);
+        
         public static IEnumerable<MethodInfo> GetAllMethodsInfo(Type type, bool includeInheritedPrivate = true)
         {
             var res = new List<MethodInfo>();
@@ -112,7 +114,6 @@ namespace AxGrid.Utils
         }
         
 
-        
         public static object Get(object obj, string path, object defaultValue = null)
         {
             var parts = PartOfPath.Get(path);
@@ -159,6 +160,57 @@ namespace AxGrid.Utils
             return current;
         }
 
+        public static T Get<T>(object obj, string path, T defaultValue = default(T))
+        {
+            return (T)Get(obj, path, defaultValue);
+        }
+
+        public static int GetInt(object obj, string path, int defaultValue = default(int))
+        {
+            return Convert.ToInt32(Get(obj, path, defaultValue));
+        }
+
+        public static List<string> ClearEvents(List<string> events)
+        {
+            var res = new List<string>();
+            foreach (var eventName in events.OrderBy(i => i.Length))
+            {
+                if (res.Any(i => eventName.StartsWith(i)))
+                    continue;
+                res.Add(eventName);
+            }
+
+            return res;
+        }
+
+        public static List<string> GetEvents(string path)
+        {
+            var res = new List<string>();
+            var currentEvent = new List<string>();
+            foreach (var str in path.Split('.'))
+            {
+                var m = rx.Match(str);
+                if (!m.Success)
+                    throw new Exception($"Invalid path {path}");
+                
+                if (m.Groups["index"].Success)
+                {
+                    currentEvent.Add(m.Groups["property"].Value);
+                    res.Add(currentEvent.Aggregate((a,b) => a+"."+b));
+                    currentEvent.RemoveAt(currentEvent.Count-1);
+                    currentEvent.Add(m.Groups["property"].Value + "[" + m.Groups["index"].Value + "]");
+                    res.Add(currentEvent.Aggregate((a,b) => a+"."+b));
+                }
+                else
+                {
+                    currentEvent.Add(m.Groups["property"].Value);
+                    res.Add(currentEvent.Aggregate((a,b) => a+"."+b));
+                }
+            }
+
+            return res;
+        }
+        
         public class PartOfPath
         {
             public string Path { get; set; }
@@ -166,7 +218,7 @@ namespace AxGrid.Utils
             public int? Index { get; set; } = null;
             
             
-            static Regex rx = new Regex(@"^(?<property>\w+)(\[(?<index>\w+)\])?$", RegexOptions.Compiled);
+           
             public static List<PartOfPath> Get(string fullPath)
             {
                 var res = new List<PartOfPath>();

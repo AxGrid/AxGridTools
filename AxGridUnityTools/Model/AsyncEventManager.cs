@@ -31,7 +31,7 @@ namespace AxGrid.Model
         /// <summary>
         /// Класс хранения объекта и метода
         /// </summary>
-        protected class MethodInfoObject
+        public class MethodInfoObject
         {
             public MethodInfo Method { get; set; }
             public object Target { get; set; }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using SmartFormat;
@@ -56,5 +57,23 @@ namespace AxGrid.Utils
              //            Text.Text.GetOrDefault("app.format.days", "{0:day|days}", (int) s.TotalDays);
              return s.ToString("HH:mm:ss");
         }
+
+        
+        public static string ToStrings(this IEnumerable<string> array, string separator = ", ")
+
+        {
+            return array.Aggregate((a, b) => a + separator + b);
+        }
+        
+        public static string ToStrings(this IEnumerable<int> array, string separator = ", ")
+        {
+            return array.Select(i => i.ToString()).ToStrings(separator);
+        }
+
+        public static string ToStrings(this IEnumerable<long> array, string separator = ", ")
+        {
+            return array.Select(i => i.ToString()).ToStrings(separator);
+        }
+
     }
 }
