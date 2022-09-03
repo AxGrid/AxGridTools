@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using UnityEngine;
+using System.Text.RegularExpressions;
+using AxGrid.Model;
 
 namespace AxGrid.State
 {
@@ -12,75 +10,23 @@ namespace AxGrid.State
     /// <typeparam name="T"></typeparam>
     public class SmartState<T>
     {
+        public string StateName { get; set; } = "State";
+        public IEventManagerInvoke EventManager { get; set; } = new SettingsEventManager();
+        public T State { get; private set; }
 
-        private readonly Dictionary<string, ISmartStateHolder> _elements = new Dictionary<string, ISmartStateHolder>();
 
-        public ISmartStateHolder this[string key]
-        {
-            get
-            {
-                if (!_elements.ContainsKey(key))
-                {
-                    throw new KeyNotFoundException($"Key {key} not found");
-                }
-                return _elements[key];
-            }
-        }
         
-        //Reflection scan all Properties and fields and store full path into Dictionary
-        private static void GetAllElementsOfType(Dictionary<string, ISmartStateHolder> res, DPathAction lastAction, Type type, string startPath = "")
+        public void Update(T newState)
         {
-            if (lastAction == null)
-                lastAction = (inObject) => inObject;
-            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
-            
-            foreach(var property in properties)
-            {
-                var path = $"{startPath}{property.Name}";
-                var holder = new SmartStatePropertyHolder
-                {
-                    Name = property.Name,
-                    Path = path,
-                    GetObject = lastAction,
-                    Property = property
-                };
-                res.Add(path, holder);
-                Console.WriteLine($"{path} ({property.PropertyType})");
-                if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
-                {
-                    GetAllElementsOfType(res, (o) => holder.GetValue(o), property.PropertyType, path+ ".");
-                }
-            }
+            var result = SmartComparator.Compare(State, newState);
+            foreach (var r in result.Differences)
+                EventManager.Invoke($"On{StateName}{r.PropertyName}Updated", r.Object2Value, r.Object1Value, r.Object2, r.Object1);
+            State = newState;
         }
 
-        public void GetValues(T obj)
+        public SmartState(T state = default(T))
         {
-            foreach (var element in _elements)
-            {
-                var property = element.Value as PropertyInfo;
-                if (property != null)
-                {
-                    property.SetValue(obj, property.GetValue(obj));
-                }
-                else
-                {
-                    var field = element.Value as FieldInfo;
-                    if (field != null)
-                    {
-                        field.SetValue(obj, field.GetValue(obj));
-                    }
-                }
-            }
-        }
-        
-        void Init()
-        {
-            GetAllElementsOfType(_elements, null, typeof(T));
-        }
-        
-        public SmartState(T state)
-        {
-            Init();
+            State = state;
         }
     }
 }

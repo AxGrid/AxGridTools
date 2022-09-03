@@ -21,7 +21,7 @@ namespace AxGrid.Model
     /// <summary>
     /// Событийный менеджер для Модели данных
     /// </summary>
-    public class AsyncEventManager : IDisposable
+    public class AsyncEventManager : IDisposable, IEventManagerInvoke
     {
         
         private static readonly ILog Log = LogManager.GetLogger("AsyncEventManager");

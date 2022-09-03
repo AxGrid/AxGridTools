@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AxGrid.Model;
 using AxGrid.Utils;
 using log4net;
 
@@ -8,7 +9,7 @@ namespace AxGrid.FSM
     /// <summary>
     /// Машина состояний
     /// </summary>
-    public class FSM : IDisposable
+    public class FSM : IDisposable, IEventManagerInvoke
     {
         public static bool ShowFsmEnterState { get; set; }
         public static bool ShowFsmExitState { get; set; }

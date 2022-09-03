@@ -33,12 +33,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.78.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\packages\CompareNETObjects.4.78.0\lib\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\contrib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="log4uni">
       <HintPath>..\contrib\log4uni.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -75,6 +79,7 @@
     <Compile Include="Model\AsyncEventManager.cs" />
     <Compile Include="Model\AsyncExecutor.cs" />
     <Compile Include="Model\DynamicModel.cs" />
+    <Compile Include="Model\IEventManagerInvoke.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\SimpleModel.cs" />
     <Compile Include="Model\Generic\DynamicList.cs" />
@@ -85,8 +90,11 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SmartFormat\PointFormater.cs" />
     <Compile Include="SmartFormat\TemplateFormater.cs" />
+    <Compile Include="State\CompareLogic.cs" />
+    <Compile Include="State\MonoBehaviourExtCollection.cs" />
+    <Compile Include="State\MonoBehaviourExtState.cs" />
+    <Compile Include="State\SettingsEventManager.cs" />
     <Compile Include="State\SmartState.cs" />
-    <Compile Include="State\SmartStateHolder.cs" />
     <Compile Include="Text\Codes.cs" />
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
