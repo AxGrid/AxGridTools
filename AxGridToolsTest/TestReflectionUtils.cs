@@ -47,6 +47,7 @@ namespace AxGridToolsTest
             public string Z = "";
             public List<string> C = new List<string>();
             public List<TC> SubObjects = new List<TC>();
+            public TC[] SubArray = null;
         }
 
         [Test]
@@ -114,11 +115,81 @@ namespace AxGridToolsTest
                 Console.WriteLine($"Changed:{r.PropertyName} {r.Object2Value} in {r.Object2}");
             }   
         }
+
+        [Test]
+        public void TestGet()
+        {
+            var t = new TC
+            {
+                A = 1,
+                B = "2",
+                Z = "3",
+                SubObjects = new List<TC>
+                {
+                    new TC
+                    {
+                        A = 3,
+                        B = "4",
+                        Z = "5",
+                        SubObjects = new List<TC>
+                        {
+                            new TC
+                            {
+                                A = 9,
+                            }
+                        }
+                    }
+                },
+                SubArray = new[]
+                {
+                    new TC
+                    {
+                        A = 6,
+                        B = "7",
+                        Z = "8",
+                    }
+                }
+            };
+            
+            Assert.AreEqual(ReflectionUtils.Get(t, "A"), 1);
+            Assert.AreEqual(ReflectionUtils.Get(t, "B"), "2");
+            Assert.AreEqual(ReflectionUtils.Get(t, "Z"), "3");
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects").GetType(), typeof(List<TC>));
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects.Count"), 1);
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects[0].A"), 3);
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects[0].B"), "4");
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects[0].Z"), "5");
+            
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubArray.Length"), 1);
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubArray[0].A"), 6);
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubArray[0].B"), "7");
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubArray[0].Z"), "8");
+            
+            Assert.AreEqual(ReflectionUtils.Get(t, "SubObjects[0].SubObjects[0].A"), 9);
+            
+        }
+
+        [Test]
+        public void TestPartOfPath()
+        {
+            string path = "SubObjects[0].B.Count";
+            var pop = ReflectionUtils.PartOfPath.Get(path);
+            Assert.AreEqual(pop.Count, 4);
+            
+            
+            Assert.AreEqual(pop[1].Path, "SubObjects[0]");
+            Assert.AreEqual(pop[2].Path, "B");
+            Assert.AreEqual(pop[3].Path, "Count");
+        }
         
         [Test]
         public void GetPartOfObject()
         {
-            TC t2 = new TC{A = 5, B = "Name", Z = "Hello",  C = new List<string>{"World", "World2"},  
+            TC t2 = new TC{
+                A = 5, 
+                B = "Name", 
+                Z = "Hello",  
+                //C = new List<string>{"World", "World2"},  
                 SubObjects = new List<TC>
                 {
                     new TC{A = 5,  SubObjects = new List<TC>{ new TC{A = 15}},}, 
@@ -126,11 +197,11 @@ namespace AxGridToolsTest
                 }
                 
             };
-            object res = ReflectionUtils.Get(t2, "A", 7);
+            object res = ReflectionUtils.Get(t2, "A", 0);
             Assert.AreEqual(res, 5);
-            Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
-            Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "World2");
-            Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 15);
+            // Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
+            // Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "World2");
+            // Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 15);
         }
 
 
@@ -140,25 +211,28 @@ namespace AxGridToolsTest
             var e1 = "A.SubObject[0].B";
             var ev = ReflectionUtils.GetEvents(e1);
             
-            Assert.AreEqual(ev.Count, 4);
-            Assert.AreEqual(ev[0], "A");
-            Assert.AreEqual(ev[1], "A.SubObject");
-            Assert.AreEqual(ev[2], "A.SubObject[0]");
-            Assert.AreEqual(ev[3], "A.SubObject[0].B");
+            Assert.AreEqual(ev.Count, 5);
+            Assert.AreEqual(ev[0], "");
+            Assert.AreEqual(ev[1], "A");
+            Assert.AreEqual(ev[2], "A.SubObject");
+            Assert.AreEqual(ev[3], "A.SubObject[0]");
+            Assert.AreEqual(ev[4], "A.SubObject[0].B");
             
             e1 = "A[0]";
             ev = ReflectionUtils.GetEvents(e1);
             
             
-            Assert.AreEqual(ev.Count, 2);
-            Assert.AreEqual(ev[0], "A");
-            Assert.AreEqual(ev[1], "A[0]");
+            Assert.AreEqual(ev.Count, 3);
+            Assert.AreEqual(ev[0], "");
+            Assert.AreEqual(ev[1], "A");
+            Assert.AreEqual(ev[2], "A[0]");
             
             e1 = "A";
             ev = ReflectionUtils.GetEvents(e1);
             
-            Assert.AreEqual(ev.Count, 1);
-            Assert.AreEqual(ev[0], "A");
+            Assert.AreEqual(ev.Count, 2);
+            Assert.AreEqual(ev[0], "");
+            Assert.AreEqual(ev[1], "A");
 
         }
 

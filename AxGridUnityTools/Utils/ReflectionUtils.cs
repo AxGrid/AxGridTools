@@ -112,21 +112,26 @@ namespace AxGrid.Utils
                 return true;
             return false;
         }
-        
+
 
         public static object Get(object obj, string path, object defaultValue = null)
         {
             var parts = PartOfPath.Get(path);
+            
             var current = obj;
             foreach (var part in parts)
             {
+                if (string.IsNullOrEmpty(part.Name)) continue;
+                
+                Log.Debug($"part:{part} {part.Index.HasValue}");
                 if (current == null)
                     return defaultValue;
                 var type = current.GetType();
                 var field = type.GetField(part.Name);
                 if (field != null)
                 {
-                    if (part.Index != null)
+                    
+                    if (part.Index.HasValue)
                     {
                         var arr = field.GetValue(current) as IList;
                         if (arr == null)
@@ -137,6 +142,7 @@ namespace AxGrid.Utils
                     {
                         current = field.GetValue(current);
                     }
+                    
                     continue;
                 }
                 var property = type.GetProperty(part.Name);
@@ -160,10 +166,10 @@ namespace AxGrid.Utils
             return current;
         }
 
-        public static T Get<T>(object obj, string path, T defaultValue = default(T))
-        {
-            return (T)Get(obj, path, defaultValue);
-        }
+        // public static T Get<T>(object obj, string path, T defaultValue = default(T))
+        // {
+        //     return (T)Get(obj, path, defaultValue);
+        // }
 
         public static int GetInt(object obj, string path, int defaultValue = default(int))
         {
@@ -187,6 +193,9 @@ namespace AxGrid.Utils
         {
             var res = new List<string>();
             var currentEvent = new List<string>();
+            res.Add("");
+            if (string.IsNullOrEmpty(path))
+                return res;
             foreach (var str in path.Split('.'))
             {
                 var m = rx.Match(str);
@@ -216,12 +225,16 @@ namespace AxGrid.Utils
             public string Path { get; set; }
             public string Name { get; set; }
             public int? Index { get; set; } = null;
-            
-            
+
+            public static PartOfPath _empty = new PartOfPath { Path = "", Name = ""};
            
             public static List<PartOfPath> Get(string fullPath)
             {
+                
                 var res = new List<PartOfPath>();
+                res.Add(_empty);
+                if (string.IsNullOrEmpty(fullPath))
+                    return res;
                 foreach (var str in fullPath.Split('.'))
                 {
                     var m = rx.Match(str);
@@ -236,6 +249,60 @@ namespace AxGrid.Utils
                     res.Add(p);
                 }
                 return res;
+            }
+        }
+
+        public class PropertyOrField
+        {
+            private PropertyInfo property;
+            private FieldInfo field;
+            
+            public object GetValue(object obj)
+            {
+                if (field != null)
+                    return field.GetValue(obj);
+                if (property != null)
+                    return property.GetValue(obj);
+                throw new Exception("Property or field is not set");
+            }
+
+            public object GetValue(object obj, object defaultValue = null, int? index = null)
+            {
+                if (field != null)
+                {
+                    if (index != null)
+                    {
+                        var arr = field.GetValue(obj) as IList;
+                        if (arr == null)
+                            return defaultValue;
+                        return arr[index.Value];
+                    }
+                    return field.GetValue(obj);
+                }
+                
+                if (property != null)
+                {
+                    if (index != null)
+                    {
+                        var arr = property.GetValue(obj) as IList;
+                        if (arr == null)
+                            return defaultValue;
+                        return arr[index.Value];
+                    }
+                    return property.GetValue(obj);
+                }
+
+                return defaultValue;
+            }
+            
+            public PropertyOrField(PropertyInfo pi)
+            {
+                property = pi;
+            }
+            
+            public PropertyOrField(FieldInfo fi)
+            {
+                field = fi;
             }
         }
     }

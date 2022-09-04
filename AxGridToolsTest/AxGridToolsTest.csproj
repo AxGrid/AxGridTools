@@ -38,6 +38,7 @@
     <Compile Include="TestReflectionUtils.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestStateManager.cs" />
     <Compile Include="TextTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +50,9 @@
   <ItemGroup>
     <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.78.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
       <HintPath>..\packages\CompareNETObjects.4.78.0\lib\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\contrib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
