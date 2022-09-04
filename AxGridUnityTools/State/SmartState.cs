@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
-using AxGrid.Model;
+using AxGrid.Compare;
 using AxGrid.Utils;
+
 
 namespace AxGrid.State
 {
@@ -16,11 +16,13 @@ namespace AxGrid.State
         public SmartStateEventManager EventManager { get; set; } = new SmartStateEventManager();
         public T State { get; private set; }
 
+        public CompareLogic CompareLogic { get; }
+        
         public void Add(object o) => EventManager.Add(o);
         
         public void Update(T newState)
         {
-            var result = SmartComparator.Compare(State, newState);
+            var result = CompareLogic.Compare(State, newState);
             Console.WriteLine(result.DifferencesString);
 
             foreach (var rs in result.Differences)
@@ -44,6 +46,15 @@ namespace AxGrid.State
 
         public SmartState(T state = default(T))
         {
+            CompareLogic = new CompareLogic
+            {
+                Config =
+                {
+                    CompareProperties = true,
+                    MaxDifferences = 1000,
+                    ShowBreadcrumb = true
+                }
+            };
             State = state;
         }
 

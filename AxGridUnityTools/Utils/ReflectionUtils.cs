@@ -136,6 +136,8 @@ namespace AxGrid.Utils
                         var arr = field.GetValue(current) as IList;
                         if (arr == null)
                             return defaultValue;
+                        if (part.Index >= arr.Count || part.Index < 0)
+                            return defaultValue;
                         current = arr[part.Index.Value];
                     }
                     else
@@ -152,6 +154,8 @@ namespace AxGrid.Utils
                     {
                         var arr = property.GetValue(current) as IList;
                         if (arr == null)
+                            return defaultValue;
+                        if (part.Index >= arr.Count || part.Index < 0)
                             return defaultValue;
                         current = arr[part.Index.Value];
                     }

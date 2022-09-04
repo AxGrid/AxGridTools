@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AxGrid.Compare;
 using AxGrid.Utils;
-using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 
 namespace AxGridToolsTest
@@ -189,19 +189,32 @@ namespace AxGridToolsTest
                 A = 5, 
                 B = "Name", 
                 Z = "Hello",  
-                //C = new List<string>{"World", "World2"},  
+                C = new List<string>{"World", "World2"},  
                 SubObjects = new List<TC>
                 {
                     new TC{A = 5,  SubObjects = new List<TC>{ new TC{A = 15}},}, 
                     new TC{A = 7},
                 }
-                
             };
             object res = ReflectionUtils.Get(t2, "A", 0);
             Assert.AreEqual(res, 5);
-            // Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
-            // Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "World2");
-            // Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 15);
+            Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
+            Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "World2");
+            Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 15);
+            Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[2].SubObjects[0].A", 0), 0);
+            
+            t2 = new TC
+            {
+                SubArray = new TC[0],
+            };
+            
+            Assert.AreEqual(ReflectionUtils.Get(t2, "L", 7),7);
+            Assert.AreEqual(ReflectionUtils.Get(t2, "C[1]", "hello"), "hello");
+            Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[0].SubObjects[0].A", 0), 0);
+            Assert.AreEqual(ReflectionUtils.Get(t2, "SubObjects[2].SubObjects[0].A", 0), 0);
+            
+            Assert.AreEqual(ReflectionUtils.Get(t2, "SubArray[2].SubObjects[0].A", 0), 0);
+
         }
 
 
@@ -234,6 +247,8 @@ namespace AxGridToolsTest
             Assert.AreEqual(ev[0], "");
             Assert.AreEqual(ev[1], "A");
 
+            
+            
         }
 
         [Test]

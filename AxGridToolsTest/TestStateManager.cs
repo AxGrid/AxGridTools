@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AxGrid.State;
 using AxGrid.Utils;
 using log4net.Config;
@@ -13,6 +14,8 @@ namespace AxGridToolsTest
         {
             public int count = 0;
             public string tx = "";
+
+            public int subCount = 0;
             
             [SmartState("sub.subName")]
             public void Event1(string t)
@@ -20,6 +23,14 @@ namespace AxGridToolsTest
                 Console.WriteLine($"t:{t}");
                 tx = t;
                 count++;
+            }
+            
+             
+            [SmartState("Subs")]
+            public void Event2(List<StateObject.Sub> sub)
+            {
+                subCount++;
+                Console.WriteLine($"Subs:{sub?.Count}");
             }
         }
         
@@ -31,6 +42,8 @@ namespace AxGridToolsTest
             {
                 public string subName = "test";
             }
+
+            public List<Sub> Subs;
         }
         
         [SetUp]
@@ -55,6 +68,7 @@ namespace AxGridToolsTest
             Assert.Null(state.State);
             state.Update(new StateObject());
             Assert.NotNull(state.State);
+            Assert.AreEqual(receiver.subCount, 1);
             Assert.AreEqual(receiver.count, 1);
             Assert.AreEqual(receiver.tx, "test");
             state.Update(new StateObject
@@ -66,8 +80,7 @@ namespace AxGridToolsTest
             });
             Assert.AreEqual(receiver.count, 2);
             Assert.AreEqual(receiver.tx, "oops!");
-            
-            
+            Assert.AreEqual(receiver.subCount, 1);
         }
 
         [Test]
