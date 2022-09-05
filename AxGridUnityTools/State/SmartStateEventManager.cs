@@ -124,6 +124,23 @@ namespace AxGrid.State
                     };
                     AddAction(mio);
                 });
+            
+            ReflectionUtils.GetAllPropertiesInfo(o.GetType()).Where(pi => pi.GetCustomAttribute<SmartStateAttribute>() != null).ForEach(
+                pi =>
+                {
+                    var a = pi.GetCustomAttribute<SmartStateAttribute>();
+                    var eventNames = a.EventName ?? pi.Name;
+                    if (eventNames.Contains("{"))
+                        eventNames = Smart.Format(eventNames, ReflectionUtils.GetAllFieldValues(o.GetType(), o));
+                    
+                    var mio = new AsyncEventManager.MethodInfoObject
+                    {
+                        Method = pi.SetMethod,
+                        Target = o,
+                        EventName = eventNames,
+                    };
+                    AddAction(mio);
+                });
         }
 
         

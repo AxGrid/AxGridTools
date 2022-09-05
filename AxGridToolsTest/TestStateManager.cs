@@ -17,6 +17,11 @@ namespace AxGridToolsTest
 
             public int subCount = 0;
             
+            [SmartState("name")]
+            public string StateName { get; set; }
+
+            public string stateNameFromMethod = "";
+            
             [SmartState("sub.subName")]
             public void Event1(string t)
             {
@@ -24,7 +29,12 @@ namespace AxGridToolsTest
                 tx = t;
                 count++;
             }
-            
+
+            [SmartState("name")]
+            public void SetName(string name)
+            {
+                stateNameFromMethod = name;
+            }
              
             [SmartState("Subs")]
             public void Event2(List<StateObject.Sub> sub)
@@ -59,6 +69,20 @@ namespace AxGridToolsTest
             Assert.AreEqual("test", ReflectionUtils.Get(so, "sub.subName"));
         }
 
+        [Test]
+        public void TestSmartStateProperties()
+        {
+            var state = new SmartState<StateObject>();
+            var receiver = new StateReceiverObject();
+            state.Add(receiver);
+            Assert.Null(receiver.StateName, "");
+            Assert.AreEqual(receiver.stateNameFromMethod, "");
+            Assert.Null(state.State);
+            state.Apply(new StateObject { name = "test" });
+            Assert.AreEqual(receiver.stateNameFromMethod, "test");
+            Assert.AreEqual(receiver.StateName, "test");
+        }
+        
         [Test]
         public void TestSmartState()
         {
