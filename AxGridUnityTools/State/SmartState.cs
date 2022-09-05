@@ -11,19 +11,20 @@ namespace AxGrid.State
     /// Smart state object
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SmartState<T>
+    public class SmartState<T> : SmartStateEventManager, ISmartState<T>
     {
         public string StateName { get; set; } = "State";
-        public SmartStateEventManager EventManager { get; set; } = new SmartStateEventManager();
+        //public SmartStateEventManager EventManager { get; set; } = new SmartStateEventManager();
         public T State { get; private set; }
+        public X GetState<X>() => (X)(object)State;
 
         public CompareLogic CompareLogic { get; }
         
-        public void Add(object o) => EventManager.Add(o);
-        
-        public void Remove(object o) => EventManager.Remove(o);
+        // public void Add(object o) => EventManager.Add(o);
+        //
+        // public void Remove(object o) => EventManager.Remove(o);
 
-        protected IEnumerable<StateEvent> GetEvents(T newState, bool saveState = true)
+        public IEnumerable<StateEvent> GetEvents(T newState, bool saveState = true)
         {
             var result = CompareLogic.Compare(State, newState);
             if (saveState) State = newState;
@@ -34,8 +35,11 @@ namespace AxGrid.State
                     State = newState,
                 }).ToList();
         }
-        
-        public void Update(T newState)
+
+        public DStateChanged<T> OnStateChanging { get; set; }
+        public DStateChanged<T> OnStateChanged { get; set; }
+
+        public void Apply(T newState, bool needSave = true)
         {
             var result = CompareLogic.Compare(State, newState);
             Console.WriteLine(result.DifferencesString);
@@ -44,18 +48,12 @@ namespace AxGrid.State
             {
                 Console.WriteLine($"PN:{rs.ActualName}");
             }
-
-            State = newState;
+            if (needSave)
+                State = newState;
             ReflectionUtils.ClearEvents(result.Differences.Select(i => i.PropertyName).ToList())
-                .Select(s =>
-                {
-                    Console.WriteLine($"Clearing event: [{s}]");
-                    return s;
-                })
                 .ForEach(ev =>
                 {
-                    Console.WriteLine($"Invoke event: {ev}");
-                    EventManager.Invoke($"{ev}", State);
+                    Invoke($"{ev}", newState);
                 });
         }
 
@@ -76,11 +74,8 @@ namespace AxGrid.State
         #region getters
 
         public object Get(string path, object defaultValue = null) => ReflectionUtils.Get(this.State, path, defaultValue);
-        public object Get<A>(string path, A defaultValue = default(A)) => (A)ReflectionUtils.Get(this.State, path, defaultValue);
+        public A Get<A>(string path, A defaultValue = default(A)) => (A)ReflectionUtils.Get(this.State, path, defaultValue);
         
-        
-       
-
         #endregion
     }
     

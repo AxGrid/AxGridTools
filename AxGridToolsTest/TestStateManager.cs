@@ -66,12 +66,12 @@ namespace AxGridToolsTest
             var receiver = new StateReceiverObject();
             state.Add(receiver);
             Assert.Null(state.State);
-            state.Update(new StateObject());
+            state.Apply(new StateObject());
             Assert.NotNull(state.State);
             Assert.AreEqual(receiver.subCount, 1);
             Assert.AreEqual(receiver.count, 1);
             Assert.AreEqual(receiver.tx, "test");
-            state.Update(new StateObject
+            state.Apply(new StateObject
             {
                 sub = new StateObject.Sub
                 {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AxGrid.Model;
 
 namespace AxGrid.State
 {
@@ -7,7 +8,7 @@ namespace AxGrid.State
     
     public interface ISmartState : ISmartStateEventManager
     {
-        T State<T>();
+        T GetState<T>();
         X Get<X>(string path, X defaultValue = default(X));
     }
 
@@ -18,13 +19,13 @@ namespace AxGrid.State
         /// Состояние изменяется
         /// В этом событии можно вызывать сервер и передать в него новое сосоятоние
         /// </summary>
-        event DStateChanged<T> OnStateChanging;
+        DStateChanged<T> OnStateChanging  { get; set; }
         
         /// <summary>
         /// Состояние изменилось
         /// Тут можно узнать что состояние поменялось
         /// </summary>
-        event DStateChanged<T> OnStateChanged;
+        DStateChanged<T> OnStateChanged { get; set; }
         
         /// <summary>
         /// Применить новое полученное состояние
@@ -52,13 +53,14 @@ namespace AxGrid.State
         void Add(object o);
         void Remove(object o);
         
-        void AddAction(string name, Action action);
-        void AddAction<X>(string name, Action<X> action);
+        void AddAction(string eventName, Action method);
+        void AddAction<X>(string eventName, DEventMethod<X> method);
         
-        void RemoveAction(Action action);
-        void RemoveAction<X>(Action<X> action);
+        void RemoveAction(Action method);
+        void RemoveAction<X>(DEventMethod<X> method);
         
-        void RemoveAction(string name, Action action);
-        void RemoveAction<X>(string name, Action<X> action);
+        void RemoveAction(string eventName, Action method);
+        void RemoveAction<X>(string eventName, DEventMethod<X> method);
+        void Invoke(string eventName, object state);
     }
 }
