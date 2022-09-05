@@ -34,7 +34,37 @@ namespace AxGrid.State
                     };
                     Add(a, mio);
                 });
-            
+        }
+
+        public void Remove(object o)
+        {
+            if (o == null) return;
+            ReflectionUtils.GetAllMethodsInfo(o.GetType()).Where(mi => mi.GetCustomAttribute<SmartStateAttribute>() != null).ForEach(
+                mi =>
+                {
+                    var a = mi.GetCustomAttribute<SmartStateAttribute>();
+                    var mio = new AsyncEventManager.MethodInfoObject
+                    {
+                        Method = mi,
+                        Target = o,
+                    };
+                    Add(a, mio);
+                });
+        }
+
+        protected void Remove(SmartStateAttribute bind, AsyncEventManager.MethodInfoObject mio,
+            string realEventName = null)
+        {
+            var eventNames = !string.IsNullOrEmpty(realEventName) ? realEventName : bind.EventName ?? mio.Method.Name;
+            if (eventNames.Contains("{") && mio.Target != null)
+                eventNames = Smart.Format(eventNames, ReflectionUtils.GetAllFieldValues(mio.Target.GetType(), mio.Target));
+            mio.EventName = eventNames;
+            if (Log.IsDebugEnabled) Log.Debug($"Remove SmartStateEvent {eventNames}");
+            foreach (var eventName in ReflectionUtils.GetEvents(eventNames))
+            {
+                if (!_eventListeners.ContainsKey(eventName)) continue;
+                _eventListeners[eventName] = _eventListeners[eventName].Where(m => m.Target != mio.Target).ToList();
+            }
         }
         
         protected void Add(SmartStateAttribute bind, AsyncEventManager.MethodInfoObject mio, string realEventName=null)
@@ -43,6 +73,7 @@ namespace AxGrid.State
             if (eventNames.Contains("{") && mio.Target != null)
                 eventNames = Smart.Format(eventNames, ReflectionUtils.GetAllFieldValues(mio.Target.GetType(), mio.Target));
             mio.EventName = eventNames;
+            if (Log.IsDebugEnabled) Log.Debug($"Add SmartStateEvent {eventNames}");
             foreach (var eventName in ReflectionUtils.GetEvents(eventNames))
             {
                 if (Log.IsDebugEnabled) Log.Debug($"Add state-event [{eventName}] for {mio.Target?.GetType().Name}");
@@ -106,5 +137,6 @@ namespace AxGrid.State
             Except = except;
         }
     }
+    
     
 }

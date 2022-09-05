@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AxGrid.Compare;
 using AxGrid.Utils;
@@ -19,6 +20,20 @@ namespace AxGrid.State
         public CompareLogic CompareLogic { get; }
         
         public void Add(object o) => EventManager.Add(o);
+        
+        public void Remove(object o) => EventManager.Remove(o);
+
+        protected IEnumerable<StateEvent> GetEvents(T newState, bool saveState = true)
+        {
+            var result = CompareLogic.Compare(State, newState);
+            if (saveState) State = newState;
+            return ReflectionUtils.ClearEvents(result.Differences.Select(i => i.PropertyName).ToList())
+                .Select(ev => new StateEvent
+                {
+                    EventName = $"{ev}",
+                    State = newState,
+                }).ToList();
+        }
         
         public void Update(T newState)
         {
@@ -68,4 +83,6 @@ namespace AxGrid.State
 
         #endregion
     }
+    
+   
 }
