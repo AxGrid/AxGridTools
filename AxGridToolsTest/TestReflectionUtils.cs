@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AxGrid.Compare;
-using AxGrid.Utils;
+using AxGrid.Internal.Proto;
+using AxGrid.Utils.Reflections;
 using NUnit.Framework;
 
 namespace AxGridToolsTest
@@ -269,6 +269,80 @@ namespace AxGridToolsTest
             Assert.AreEqual(res[0], "A.Count");
             Assert.AreEqual(res[1], "A.SubObject");
             Assert.AreEqual(res[2], "A.Elements.Internal[0].B");
+        }
+
+        [Test]
+        public void TestGetOrCreatePath()
+        {
+            var state = new PState();
+            var path = "Struct.Name";
+            var obj = ReflectionUtils.GetPathOrCreate(state, path);
+            
+
+        }
+
+        [Test]
+        public void TestDeep()
+        {
+            PState state = new PState
+            {
+                Id = 1,
+                Name = "Name",
+                StateEnums = {PStateEnum.Ok, PStateEnum.Error, PStateEnum.Ok},
+                StateEnum = PStateEnum.Error,
+                Strings = {"Hello", "World"},
+                Struct = new PSubStruct
+                {
+                    Id = 2,
+                    Name = "Sub Name",
+                    SubStruct = new PSubStruct
+                    {
+                        Id = 3,
+                    },
+                    Structs =
+                    {
+                        new PSubStruct {Id = 4,},
+                        new PSubStruct {Id = 5,},
+                    },
+                },
+                Structs =
+                {
+                    new PSubStruct {Id = 6, Name = "Subs Name"},
+                    new PSubStruct {Id = 7,},
+                }
+            };
+            var state2 = state.Clone();
+            Assert.AreEqual(state.Id, state2.Id);
+        }
+
+        [Test]
+        public void CreateArrayItem()
+        {
+            PState state = new PState();
+            PropertyOrField pof = new PropertyOrField(state, "Name");
+            Assert.AreEqual(pof.GetValueType(), typeof(string));
+            state = pof.SetValue(state, "Hello") as PState;
+            Assert.AreEqual(state.Name, "Hello");
+            
+            pof = new PropertyOrField(state, "Structs");
+            pof.SetValue(state, new PSubStruct {Id = 6, Name = "Subs Name"}, 3);
+            Assert.IsNotNull(state.Structs);
+            Assert.AreEqual(state.Structs.Count, 4);
+            Assert.IsNotNull(state.Structs[3]);
+            Assert.AreEqual(state.Structs[3].Name, "Subs Name");
+            Assert.AreEqual(state.Structs[3].Id, 6);
+
+            pof = new PropertyOrField(state, "StateEnum");
+            Assert.AreNotEqual(state.StateEnum, PStateEnum.Ok);
+            pof.SetValue(state, PStateEnum.Ok);
+            Assert.AreEqual(state.StateEnum, PStateEnum.Ok);
+            
+            Assert.AreEqual(state.StateEnums.Count, 0);
+            pof = new PropertyOrField(state, "StateEnums");
+            pof.SetValue(state, PStateEnum.Error, 3);
+            Assert.AreEqual(state.StateEnums.Count, 4);
+            Assert.AreEqual(state.StateEnums[3], PStateEnum.Error);
+
             
         }
     }

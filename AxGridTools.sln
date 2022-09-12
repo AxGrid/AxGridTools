@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxGridToolsTest", "AxGridTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxGridToolsConsole", "AxGridToolsConsole\AxGridToolsConsole.csproj", "{28D3B738-5333-4723-81A0-8371151AC413}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxGridState", "AxGridState\AxGridState.csproj", "{98B305A4-CF2D-4413-9F38-88ABCF500DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{28D3B738-5333-4723-81A0-8371151AC413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28D3B738-5333-4723-81A0-8371151AC413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28D3B738-5333-4723-81A0-8371151AC413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98B305A4-CF2D-4413-9F38-88ABCF500DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B305A4-CF2D-4413-9F38-88ABCF500DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B305A4-CF2D-4413-9F38-88ABCF500DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B305A4-CF2D-4413-9F38-88ABCF500DA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

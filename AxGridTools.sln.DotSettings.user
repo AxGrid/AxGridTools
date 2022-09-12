@@ -1,5 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fzed_002FRiderProjects_002FAxGridTools_002Fcontrib_002FAxGrid_002ECompare_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fzed_002FRiderProjects_002FAxGridTools_002Fcontrib_002FGoogle_002EProtobuf_002Flib_002Fnet45_002FGoogle_002EProtobuf_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fzed_002FRiderProjects_002FAxGridTools_002Fcontrib_002Flog4net_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fzed_002FRiderProjects_002FAxGridTools_002Fcontrib_002Flog4uni_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fzed_002FRiderProjects_002FAxGridTools_002Fcontrib_002FSmartFormat_002Edll/@EntryIndexedValue">True</s:Boolean>

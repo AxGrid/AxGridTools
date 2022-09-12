@@ -35,6 +35,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FlowTest.cs" />
+    <Compile Include="Proto\Axstate.cs" />
+    <Compile Include="Proto\AxstatePart.cs" />
+    <Compile Include="TestAxStateApplicator.cs" />
     <Compile Include="TestReflectionUtils.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -42,6 +45,10 @@
     <Compile Include="TextTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AxGridState\AxGridState.csproj">
+      <Project>{98b305a4-cf2d-4413-9f38-88abcf500da2}</Project>
+      <Name>AxGridState</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AxGridUnityTools\AxGridUnityTools.csproj">
       <Project>{65665ca7-252c-493f-83c1-92eeb9443354}</Project>
       <Name>AxGridUnityTools</Name>
@@ -50,6 +57,9 @@
   <ItemGroup>
     <Reference Include="AxGrid.Compare">
       <HintPath>..\contrib\AxGrid.Compare.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\contrib\Google.Protobuf\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\contrib\log4net.dll</HintPath>

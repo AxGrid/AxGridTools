@@ -6,25 +6,21 @@ namespace AxGrid.State
     public abstract class MonoBehaviourExtState<T> : MonoBehaviourExt
     {
         [SerializeField]
-        private string statePath = "OnStateUpdated";
+        private string smartStatePath = "OnStateUpdated";
         
         [OnStart]
         private void __Bind()
         {
-            
+            Settings.SmartState.AddAction<T>(smartStatePath, OnStateUpdated);
         }
 
         [OnDestroy]
         private void __UnBind()
         {
-                
+            Settings.SmartState.RemoveAction<T>(smartStatePath, OnStateUpdated);
         }
-        
-        public virtual void OnStateUpdated(T field)
-        {
-            
-        }
-        
-        
+
+        public abstract void OnStateUpdated(T field);
+
     }
 }

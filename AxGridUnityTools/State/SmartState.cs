@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AxGrid.Compare;
 using AxGrid.Utils;
+using AxGrid.Utils.Reflections;
 
 
 namespace AxGrid.State

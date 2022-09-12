@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AxGrid.State;
 using AxGrid.Utils;
+using AxGrid.Utils.Reflections;
 using log4net.Config;
 using NUnit.Framework;
 
