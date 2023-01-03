@@ -115,6 +115,11 @@
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
     <Compile Include="Text\TextRepository.cs" />
+    <Compile Include="Tools\Array\CircleArray.cs" />
+    <Compile Include="Tools\Array\GridArray.cs" />
+    <Compile Include="Tools\Array\LinearArray.cs" />
+    <Compile Include="Tools\AxRotate2D.cs" />
+    <Compile Include="Tools\AxRotator.cs" />
     <Compile Include="Tools\AxSprite.cs" />
     <Compile Include="Tools\AxSpriteCollection.cs" />
     <Compile Include="Tools\AxSpriteObject.cs" />
@@ -132,7 +137,9 @@
     <Compile Include="Utils\NullableDictionary.cs" />
     <Compile Include="Utils\NullObject.cs" />
     <Compile Include="Utils\Numbers.cs" />
-    <Compile Include="Utils\Reflections\PropertyOfIndexField.cs" />
+    <Compile Include="Utils\Polar.cs" />
+    <Compile Include="Utils\Reflections\IPropertyOrField.cs" />
+    <Compile Include="Utils\Reflections\PropertyOrFieldArray.cs" />
     <Compile Include="Utils\Reflections\PropertyOrField.cs" />
     <Compile Include="Utils\Reflections\PropertyOrFieldCollection.cs" />
     <Compile Include="Utils\Reflections\ReflectionUtils.cs" />

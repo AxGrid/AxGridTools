@@ -117,20 +117,20 @@ namespace AxGrid.State
             
             var stateField = new PropertyOrField(stateObject, op.Field.Field);
             var diffField = new PropertyOrField(diffObject, op.Field.Field);
-            Console.WriteLine($"Field: {op.Field.Field}[{op.Field.Index}] ");
-            var value = op.Field.IsArray
-                ? diffField.GetValue(diffObject, index: op.Field.Index)
-                : diffField.GetValue(diffObject);
-            Console.WriteLine($"Field.Value {value}");
-            if (op.Field.IsArray)
-            {
-                stateField.SetValue(stateObject, diffField.GetValue(diffObject, index: op.Field.Index),
-                    index: op.Field.Index);
-            }
-            else
-            {
-                stateField.SetValue(stateObject, diffField.GetValue(diffObject));
-            }
+            // Console.WriteLine($"Field: {op.Field.Field}[{op.Field.Index}] ");
+            // var value = op.Field.IsArray
+            //     ? diffField.GetValue(diffObject, index: op.Field.Index)
+            //     : diffField.GetValue(diffObject);
+            // Console.WriteLine($"Field.Value {value}");
+            // if (op.Field.IsArray)
+            // {
+            //     stateField.SetValue(stateObject, diffField.GetValue(diffObject, index: op.Field.Index),
+            //         index: op.Field.Index);
+            // }
+            // else
+            // {
+            //     stateField.SetValue(stateObject, diffField.GetValue(diffObject));
+            // }
             
         }
         

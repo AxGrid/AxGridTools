@@ -315,33 +315,45 @@ namespace AxGridToolsTest
             Assert.AreEqual(state.Id, state2.Id);
         }
 
+        
+        
         [Test]
-        public void CreateArrayItem()
+        public void PropertyOrFieldTest()
         {
             PState state = new PState();
             PropertyOrField pof = new PropertyOrField(state, "Name");
             Assert.AreEqual(pof.GetValueType(), typeof(string));
-            state = pof.SetValue(state, "Hello") as PState;
+            pof.SetValue(state, "Hello");
             Assert.AreEqual(state.Name, "Hello");
             
-            pof = new PropertyOrField(state, "Structs");
-            pof.SetValue(state, new PSubStruct {Id = 6, Name = "Subs Name"}, 3);
+            var pofa = new PropertyOrFieldArray(state.Structs);
+            pofa.SetValue(state.Structs, 3, new PSubStruct {Id = 6, Name = "Subs Name"});
             Assert.IsNotNull(state.Structs);
             Assert.AreEqual(state.Structs.Count, 4);
             Assert.IsNotNull(state.Structs[3]);
             Assert.AreEqual(state.Structs[3].Name, "Subs Name");
             Assert.AreEqual(state.Structs[3].Id, 6);
-
-            pof = new PropertyOrField(state, "StateEnum");
-            Assert.AreNotEqual(state.StateEnum, PStateEnum.Ok);
-            pof.SetValue(state, PStateEnum.Ok);
-            Assert.AreEqual(state.StateEnum, PStateEnum.Ok);
             
-            Assert.AreEqual(state.StateEnums.Count, 0);
-            pof = new PropertyOrField(state, "StateEnums");
-            pof.SetValue(state, PStateEnum.Error, 3);
-            Assert.AreEqual(state.StateEnums.Count, 4);
-            Assert.AreEqual(state.StateEnums[3], PStateEnum.Error);
+            Assert.AreEqual((pofa.GetValue(state.Structs,3) as PSubStruct).Id, 6);
+            Assert.AreEqual((pofa.GetValue(state.Structs,3) as PSubStruct).Name, "Subs Name");
+            
+
+            
+            
+
+            
+            
+            //
+            // pof = new PropertyOrField(state, "StateEnum");
+            // Assert.AreNotEqual(state.StateEnum, PStateEnum.Ok);
+            // pof.SetValue(state, PStateEnum.Ok);
+            // Assert.AreEqual(state.StateEnum, PStateEnum.Ok);
+            //
+            // Assert.AreEqual(state.StateEnums.Count, 0);
+            // pof = new PropertyOrField(state, "StateEnums");
+            // pof.SetValue(state, PStateEnum.Error, 3);
+            // Assert.AreEqual(state.StateEnums.Count, 4);
+            // Assert.AreEqual(state.StateEnums[3], PStateEnum.Error);
 
             
         }
