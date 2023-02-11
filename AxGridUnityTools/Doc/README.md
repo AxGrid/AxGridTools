@@ -1,10 +1,11 @@
 AxGridUnityTools
 ================
 
-* Библиотека для расширения функционала стандартного MonoBehaviour
+* [Библиотека для расширения функционала стандартного MonoBehaviour](#расширения-функционала-стандартного-monobehaviour)
 * [Модель данных в виде Dictionary<string, object>](Model.md)
-* Очередь событий объектов
-* FSM
+* [Очередь событий объектов](Model.md#eventmanager)
+* [FSM](FSM.md)
+* [Как использовать AxGridUnityTools](Use.md)
 * Простой аниматор Path
 
 ## Расширения функционала стандартного MonoBehaviour
