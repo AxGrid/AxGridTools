@@ -2,7 +2,7 @@ AxGridUnityTools
 ================
 
 * Библиотека для расширения функционала стандартного MonoBehaviour
-* Модель данных в виде Dictionary<string, object>
+* [Модель данных в виде Dictionary<string, object>](Model.md)
 * Очередь событий объектов
 * FSM
 * Простой аниматор Path
