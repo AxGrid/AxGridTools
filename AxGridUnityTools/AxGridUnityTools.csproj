@@ -80,6 +80,7 @@
     <Compile Include="Base\MonoBehaviourExt2D.cs" />
     <Compile Include="Base\MonoBehaviourExt2DBind.cs" />
     <Compile Include="Base\MonoBehaviourExtBind.cs" />
+    <Content Include="Doc\Path.md" />
     <Compile Include="Flow\Flow.cs" />
     <Compile Include="Flow\FlowBuilder.cs" />
     <Compile Include="Flow\FlowContext.cs" />

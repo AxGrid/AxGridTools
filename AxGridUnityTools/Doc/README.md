@@ -6,7 +6,7 @@ AxGridUnityTools
 * [Очередь событий объектов](Model.md#eventmanager)
 * [FSM](FSM.md)
 * [Как использовать AxGridUnityTools](Use.md)
-* Простой аниматор Path
+* [Простой аниматор Path](Path.md)
 
 ## Расширения функционала стандартного MonoBehaviour
 
@@ -19,7 +19,7 @@ public MyComponent : MonoBehaviourExt
     [OnStart]
     public void Init()
     {
-        this.Invoke(1.0f, () => Debug.Log("Hello world!"));
+        Debug.Log("Hello world!");
     }
 }
 
