@@ -144,3 +144,64 @@ public class MyComponent : MonoBehaviourExtBind
     }
 }
 ```
+
+EventManager
+------------
+
+В каждой моделе есть EventManager, он отвечает за отправку очереде событий, подписанным на них методам.
+Cамый простой способ получить доступ к нему - это через ссылку вызвать метод `Settings.Model.EventManager`
+
+```csharp
+public class MyComponent : MonoBehaviourExt
+{
+    [OnStart]
+    public void Init()
+    {
+        Settings.Model.EventManager.Add("OnMyEvent", OnMyEvent);
+    }
+    
+    // Отправим событие через секунду
+    [OnDelay(1f)]
+    public void ChangeHello()
+    {
+        Settings.Model.EventManager.Invoke("OnMyEvent", "Hello", 5);
+        // Лучше использовать прямой метод, он так-же отправит события и в текущую FSM
+        Settings.Invoke("OnMyEvent", "Hello", 5);
+    }
+
+    private void OnMyEvent(string eventStringArgs, int eventIntArgs)
+    {
+        Debug.Log("OnMyEvent {0} {1}", eventStringArgs, eventIntArgs);
+    }
+    
+    [OnDestroy]
+    public void OnDestroy()
+    {
+        // А вот так можно отписатся от события
+        Settings.Model.EventManager.Remove(OnMyEvent);
+    }
+   
+}
+```
+
+Так-же для подписи на события можно использовать конструкцию через атрибут `[Bind]` и компонент `MonoBehaviourExtBind`
+
+```csharp
+public class MyComponent : MonoBehaviourExtBind
+{
+    [OnDelay(1f)]
+    public void ChangeHello()
+    {
+        Settings.Invoke("OnMyEvent", "Hello", 5);
+    }
+
+    [Bind("OnMyEvent")]
+    private void OnMyEvent(string eventStringArgs, int eventIntArgs)
+    {
+        Debug.Log("OnMyEvent {0} {1}", eventStringArgs, eventIntArgs);
+    }
+   
+}
+```
+
+> Все события подписываются именно в момент `[OnStart]` вызовы событий в `[OnAwake]` не будут обработаны.
