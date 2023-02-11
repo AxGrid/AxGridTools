@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using AxGrid.Model;
-using AxGrid.State;
 
 namespace AxGrid {
     public static class Settings {
@@ -39,6 +37,5 @@ namespace AxGrid {
             Fsm?.Invoke(eventName, args);
         }
         
-        public static ISmartState SmartState { get; set; }
     }
 }

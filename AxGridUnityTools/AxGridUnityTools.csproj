@@ -103,14 +103,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SmartFormat\PointFormater.cs" />
     <Compile Include="SmartFormat\TemplateFormater.cs" />
-    <Compile Include="State\ISmartState.cs" />
-    <Compile Include="State\IStateIndexedItem.cs" />
-    <Compile Include="State\MonoBehaviourExtCollection.cs" />
-    <Compile Include="State\MonoBehaviourExtCollectionItem.cs" />
-    <Compile Include="State\MonoBehaviourExtState.cs" />
-    <Compile Include="State\SmartState.cs" />
-    <Compile Include="State\SmartStateEventManager.cs" />
-    <Compile Include="State\StateEvent.cs" />
     <Compile Include="Text\Codes.cs" />
     <Compile Include="Text\ITextRepository.cs" />
     <Compile Include="Text\Text.cs" />
@@ -148,6 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Doc\Model.md" />
+    <Content Include="Doc\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

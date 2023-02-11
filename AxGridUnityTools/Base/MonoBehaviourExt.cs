@@ -18,6 +18,7 @@ namespace AxGrid.Base
 		private List<BaseAttributeInstance> destroyList;
 		private List<BaseAttributeInstance> startList;
 		private List<BaseAttributeInstance> updateList;
+		private List<BaseAttributeInstance> fixedUpdateList;
 		
 		private List<RefreshAttributeInstance> refreshList;
 		private List<DelayAttributeInstance> delayList;
@@ -222,6 +223,12 @@ namespace AxGrid.Base
 					a.Invoke();
 		}
 
+		public void FixedUpdate()
+		{
+			foreach (var a in fixedUpdateList)
+				a.Invoke();
+		}
+
 		// Update is called once per frame
 		public void Update()
 		{
@@ -285,6 +292,7 @@ namespace AxGrid.Base
 			awakeList = new List<BaseAttributeInstance>();
 			startList = new List<BaseAttributeInstance>();
 			updateList = new List<BaseAttributeInstance>();
+			fixedUpdateList = new List<BaseAttributeInstance>();
 			destroyList = new List<BaseAttributeInstance>();
 			enableList = new List<BaseAttributeInstance>();
 			disableList = new List<BaseAttributeInstance>();
@@ -349,6 +357,14 @@ namespace AxGrid.Base
 
 						var a = (OnUpdate) o;
 						updateList.Add(new BaseAttributeInstance{Method = mi,Target = this,Priority = a.Priority});
+					}
+					
+					if (o is OnFixedUpdate)
+					{
+						if (mi.GetGenericArguments().Length > 0)
+							throw new ArgumentException("Need method without arguments public void fixedUpdate()");
+						var a = (OnFixedUpdate) o;
+						fixedUpdateList.Add(new BaseAttributeInstance{Method = mi,Target = this,Priority = a.Priority});
 					}
 					
 					if (o is OnEnable)
@@ -635,6 +651,44 @@ namespace AxGrid.Base
 
 	}
 	
+	
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	public class OnFixedUpdate : MonoBehaviourExtAttribute, IComparable<OnFixedUpdate>
+	{
+
+		public OnFixedUpdate(RunLevel runLevel) : this((int) runLevel)
+		{
+		}
+
+		public OnFixedUpdate() : this(0)
+		{
+		}
+
+		public OnFixedUpdate(int priority)
+		{
+			Priority = priority;
+		}
+
+		public override void Invoke()
+		{
+			if (WhenList.ContainsKey(Method) && !WhenList[Method].Check())
+				return;
+
+			base.Invoke();
+		}
+
+		public int CompareTo(OnFixedUpdate other)
+		{
+			return Priority - other.Priority;
+		}
+
+
+		public override string ToString()
+		{
+			return string.Format("[FixedUpdate: Priority={0}]", Priority);
+		}
+
+	}
 	
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 	public class OnEnable : MonoBehaviourExtAttribute, IComparable<OnUpdate>
