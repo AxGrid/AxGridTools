@@ -203,8 +203,11 @@ namespace AxGrid.FSM
             exits = new List<MethodInfoObject>();
             updates = new List<MethodInfoObject>();
             timersDictionary = new Dictionary<string, TimingObject>();
-            
-            foreach (var methodInfo in ReflectionUtils.GetAllMethodsInfo(GetType()))
+
+            var stateAttribute = this.GetType().GetCustomAttribute<State>();
+            var includeInheritedPrivate = stateAttribute != null && stateAttribute.IncludeInheritedPrivate;
+
+            foreach (var methodInfo in ReflectionUtils.GetAllMethodsInfo(GetType(), includeInheritedPrivate))
             {
                 foreach (var o in methodInfo.GetCustomAttributes(false))
                 {
@@ -317,10 +320,13 @@ namespace AxGrid.FSM
     public class State : Attribute
     {
         public string Name { get; protected set; }
+
+        public bool IncludeInheritedPrivate { get; set; } = false;
         
-        public State(string name)
+        public State(string name, bool includeInheritedPrivate = false)
         {
             Name = name;
+            IncludeInheritedPrivate = includeInheritedPrivate;
         }
     }
     

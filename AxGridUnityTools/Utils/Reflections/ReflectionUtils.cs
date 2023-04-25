@@ -57,7 +57,7 @@ namespace AxGrid.Utils.Reflections
             res.AddRange(type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
             if (includeInheritedPrivate && type.BaseType != null)
                 res.AddRange(GetAllMethodsInfo(type.BaseType));
-            return res;
+            return res.Distinct();
         }
         
         public static IEnumerable<FieldInfo> GetAllFieldsInfo(Type type, bool includeInheritedPrivate = true)
