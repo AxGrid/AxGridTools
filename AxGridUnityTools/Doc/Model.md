@@ -157,7 +157,7 @@ public class MyComponent : MonoBehaviourExt
     [OnStart]
     public void Init()
     {
-        Settings.Model.EventManager.Add("OnMyEvent", OnMyEvent);
+        Settings.Model.EventManager.AddAction<string,int>("OnMyEvent", OnMyEvent);
     }
     
     // Отправим событие через секунду
@@ -171,14 +171,14 @@ public class MyComponent : MonoBehaviourExt
 
     private void OnMyEvent(string eventStringArgs, int eventIntArgs)
     {
-        Debug.Log("OnMyEvent {0} {1}", eventStringArgs, eventIntArgs);
+        Debug.Log($"OnMyEvent {eventStringArgs} {eventIntArgs}");
     }
     
     [OnDestroy]
     public void OnDestroy()
     {
         // А вот так можно отписатся от события
-        Settings.Model.EventManager.Remove(OnMyEvent);
+        Settings.Model.EventManager.RemoveAction<string,int>("OnMyEvent", OnMyEvent);
     }
    
 }
@@ -198,7 +198,7 @@ public class MyComponent : MonoBehaviourExtBind
     [Bind("OnMyEvent")]
     private void OnMyEvent(string eventStringArgs, int eventIntArgs)
     {
-        Debug.Log("OnMyEvent {0} {1}", eventStringArgs, eventIntArgs);
+        Debug.Log($"OnMyEvent {eventStringArgs} {eventIntArgs}");
     }
    
 }
