@@ -37,7 +37,7 @@ public class MyComponent : MonoBehaviourExt
 Каждое изменение вызванное методом `Set` генерирует событие `ModelChanged` в котором передается ключ измененного значения и новое значение.
 Так-же происходит вызов именованного события On{FieldName}Changed, где FieldName - имя поля которое было изменено.
 
-Подписаться на эти события можно через методы EventManager, Model.EventManager.Add("FieldName", ActionMethod)
+Подписаться на эти события можно через методы EventManager, Model.EventManager.AddAction("FieldName", ActionMethod)
 
 ```csharp
 public class MyComponent : MonoBehaviourExt
@@ -45,7 +45,7 @@ public class MyComponent : MonoBehaviourExt
     [OnStart]
     public void Init()
     {
-        Model.EventManager.Add("Hello", OnHelloChanged);
+        Model.EventManager.AddAction("Hello", OnHelloChanged);
     }
     
     [OnDelay(1f)]
@@ -57,7 +57,7 @@ public class MyComponent : MonoBehaviourExt
     private void OnHelloChanged()
     {
         var value = Model.Get<string>("Hello");
-        Debug.Log("Hello changed to {0}", value);
+        Debug.Log($"Hello changed to {value}");
     }
 }
 ```
